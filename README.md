@@ -1,1 +1,1 @@
-# stellaris-ui-traits
+# stellaris-ui-species-traits

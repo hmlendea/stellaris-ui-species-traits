@@ -1,0 +1,56 @@
+ui_trait_very_talented = {
+    cost = 2
+    potential_crossbreeding_chance = 1.0
+    opposites = { "trait_talented" "trait_nerve_stapled" }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    modifier = {
+        leader_skill_levels = 2
+    }
+}
+
+ui_trait_very_traditional = {
+    cost = 2
+    potential_crossbreeding_chance = 1.0
+    opposites = { "trait_traditional" "trait_quarrelsome" "ui_trait_very_quarrelsome" }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.20
+    }
+}
+
+ui_trait_very_quarrelsome = {
+    cost = -2
+    potential_crossbreeding_chance = 1.0
+    opposites = { "trait_traditional" "trait_quarrelsome" "ui_trait_very_traditional" }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.20
+    }
+    ai_weight = {
+        weight = 1
+        modifier = {
+            factor = 0
+            years_passed > 5
+        }
+    }
+}
+
+ui_trait_very_docile = {
+    cost = 3
+    potential_crossbreeding_chance = 1.0
+    opposites = { "trait_docile" "trait_unruly" "ui_trait_very_unruly" }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    modifier = {
+        species_empire_size_mult = 0.15
+    }
+}
+
+ui_trait_very_unruly = {
+    cost = -3
+    potential_crossbreeding_chance = 1.0
+    opposites = { "trait_docile" "trait_unruly" "ui_trait_very_docile" }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    modifier = {
+        species_empire_size_mult = -0.15
+    }
+}

@@ -198,9 +198,9 @@ ui_trait_pessimistic = {
 
 ui_trait_agile = {
   cost = 2
-    opposites = { "ui_trait_sluggish" }
+    opposites = { "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
     
-    allowed_archetypes = { BIOLOGICAL }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
   
     modifier = {
         weapon_type_kinetic_weapon_fire_rate_mult = 0.05
@@ -209,11 +209,39 @@ ui_trait_agile = {
     }
 }
 
+ui_trait_very_agile = {
+  cost = 3
+    opposites = { "ui_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = 0.07
+        weapon_type_energy_weapon_fire_rate_mult = 0.07
+        weapon_type_explosive_weapon_fire_rate_mult = 0.07
+        army_damage_mult = 0.3
+    }
+}
+
+ui_trait_extremely_agile = {
+  cost = 4
+    opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = 0.10
+        weapon_type_energy_weapon_fire_rate_mult = 0.10
+        weapon_type_explosive_weapon_fire_rate_mult = 0.10
+        army_damage_mult = 0.5
+    }
+}
+
 ui_trait_sluggish = {
   cost = -2
-    opposites = { "ui_trait_agile" }
+    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
     
-    allowed_archetypes = { BIOLOGICAL }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
   
     modifier = {
         weapon_type_kinetic_weapon_fire_rate_mult = -0.05
@@ -222,26 +250,100 @@ ui_trait_sluggish = {
     }
 }
 
-ui_trait_light_eaters = {
-  cost = 1
-    opposites = { "ui_trait_gluttonous" }
+ui_trait_very_sluggish = {
+  cost = -3
+    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_extremely_sluggish" }
     
-    allowed_archetypes = { BIOLOGICAL }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
   
     modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = -0.07
+        weapon_type_energy_weapon_fire_rate_mult = -0.07
+        weapon_type_explosive_weapon_fire_rate_mult = -0.07
+        army_damage_mult = -0.3
+    }
+}
+
+ui_trait_extremely_sluggish = {
+  cost = -4
+    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = -0.10
+        weapon_type_energy_weapon_fire_rate_mult = -0.10
+        weapon_type_explosive_weapon_fire_rate_mult = -0.10
+        army_damage_mult = -0.5
+    }
+}
+
+ui_trait_light_eaters = {
+  cost = 1
+    opposites = { "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
         planet_pops_organics_food_upkeep_mult = -0.10
+    }
+}
+
+ui_trait_very_light_eaters = {
+  cost = 2
+    opposites = { "ui_trait_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = -0.15
+    }
+}
+
+ui_trait_extremely_light_eaters = {
+  cost = 3
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = -0.20
     }
 }
 
 ui_trait_gluttonous = {
     cost = -1
     potential_crossbreeding_chance = 1.0
-    opposites = { "ui_trait_light_eaters" }
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = 0.10
+    }
+}
+
+ui_trait_very_gluttonous = {
+    cost = -2
+    potential_crossbreeding_chance = 1.0
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_extremely_gluttonous" }
     
     allowed_archetypes = { BIOLOGICAL }
   
     modifier = {
-        planet_pops_organics_food_upkeep_mult = 0.10
+        planet_pops_organics_food_upkeep_mult = 0.15
+    }
+}
+
+ui_trait_extremely_gluttonous = {
+    cost = -3
+    potential_crossbreeding_chance = 1.0
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" }
+    
+    allowed_archetypes = { BIOLOGICAL }
+  
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = 0.20
     }
 }
 
@@ -418,5 +520,155 @@ ui_trait_momentary = {
     }
     ai_weight = {
         weight = 0
+    }
+}
+
+ui_trait_creative = {
+    cost = 2
+    opposites = { "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.10
+        planet_amenities_mult = 0.10
+    }
+}
+
+ui_trait_very_creative = {
+    cost = 3
+    opposites = { "ui_trait_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.15
+        planet_amenities_mult = 0.15
+    }
+}
+
+ui_trait_extremely_creative = {
+    cost = 5
+    opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.2
+        planet_amenities_mult = 0.2
+    }
+}
+
+ui_trait_uncreative = {
+    cost = -2
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremly_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.10
+        planet_amenities_mult = -0.10
+    }
+}
+
+ui_trait_very_uncreative = {
+    cost = -3
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.15
+        planet_amenities_mult = -0.15
+    }
+}
+
+ui_trait_extremely_uncreative = {
+    cost = -5
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.20
+        planet_amenities_mult = -0.20
+    }
+}
+
+ui_trait_demanding = {
+    cost = -1
+    opposites = { "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = 0.10
+        planet_pops_consumer_goods_upkeep_mult = 0.01
+        pop_housing_usage_mult = 0.01
+    }
+}
+
+ui_trait_very_demanding = {
+    cost = -2
+    opposites = { "trait_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = 0.125
+        planet_pops_consumer_goods_upkeep_mult = 0.025
+        pop_housing_usage_mult = 0.025
+    }
+}
+
+ui_trait_extremely_demanding = {
+    cost = -3
+    opposites = { "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = 0.15
+        planet_pops_consumer_goods_upkeep_mult = 0.05
+        pop_housing_usage_mult = 0.05
+    }
+}
+
+ui_trait_undemanding = {
+    cost = 1
+    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = -0.10
+        planet_pops_consumer_goods_upkeep_mult = -0.01
+        pop_housing_usage_mult = -0.01
+    }
+}
+
+ui_trait_very_undemanding = {
+    cost = 2
+    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = -0.125
+        planet_pops_consumer_goods_upkeep_mult = -0.025
+        pop_housing_usage_mult = -0.025
+    }
+}
+
+ui_trait_extremely_undemanding = {
+    cost = 3
+    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = -0.15
+        planet_pops_consumer_goods_upkeep_mult = -0.05
+        pop_housing_usage_mult = -0.05
     }
 }

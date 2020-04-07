@@ -1,5 +1,17 @@
 ﻿l_english:
 
+# New Vanilla tiers
+ ui_trait_very_talented_desc:0 "§LMembers of this species are born with a very strong natural aptitude.§!"
+ ui_trait_very_talented:0 "Very Talented"
+ ui_trait_very_traditional_desc:0 "§LMany aspects of this species' cognition makes it very predisposed to especially value historical precedence and group unity.§!"
+ ui_trait_very_traditional:0 "Very Traditional"
+ ui_trait_very_quarrelsome_desc:0 "§LWhile not inherently distrustful, members of this species are very often socially combative.§!\n"
+ ui_trait_very_quarrelsome:0 "Very Quarrelsome"
+ ui_trait_very_docile_desc:0 "§LMembers of this species are very easy to manage and organize. They tend to be very cooperative and amicable.§!"
+ ui_trait_very_docile:0 "Very Docile"
+ ui_trait_very_unruly_desc:0 "§LMembers of this species are very difficult to manage and organize. They do not like being told what to do, and are very often quarrelsome or questioning.§!\n"
+ ui_trait_very_unruly:0 "Very Unruly"
+
 # Species traits
  ui_trait_agile_desc:0 "§LMembers of this have quick reflexes, resulting if very short response times in battle.§!\n"
  ui_trait_agile:0 "Agile"

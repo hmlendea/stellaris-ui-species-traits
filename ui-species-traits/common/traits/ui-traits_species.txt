@@ -492,3 +492,81 @@ ui_trait_extremely_uncreative = {
         planet_amenities_mult = -0.20
     }
 }
+
+ui_trait_demanding = {
+    cost = -1
+    opposites = { "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = 0.10
+        planet_pops_consumer_goods_upkeep_mult = 0.01
+        pop_housing_usage_mult = 0.01
+    }
+}
+
+ui_trait_very_demanding = {
+    cost = -2
+    opposites = { "trait_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = 0.125
+        planet_pops_consumer_goods_upkeep_mult = 0.025
+        pop_housing_usage_mult = 0.025
+    }
+}
+
+ui_trait_extremely_demanding = {
+    cost = -3
+    opposites = { "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = 0.15
+        planet_pops_consumer_goods_upkeep_mult = 0.05
+        pop_housing_usage_mult = 0.05
+    }
+}
+
+ui_trait_undemanding = {
+    cost = 1
+    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = -0.10
+        planet_pops_consumer_goods_upkeep_mult = -0.01
+        pop_housing_usage_mult = -0.01
+    }
+}
+
+ui_trait_very_undemanding = {
+    cost = 2
+    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_extremely_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = -0.125
+        planet_pops_consumer_goods_upkeep_mult = -0.025
+        pop_housing_usage_mult = -0.025
+    }
+}
+
+ui_trait_extremely_undemanding = {
+    cost = 3
+    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        pop_amenities_usage_mult = -0.15
+        planet_pops_consumer_goods_upkeep_mult = -0.05
+        pop_housing_usage_mult = -0.05
+    }
+}

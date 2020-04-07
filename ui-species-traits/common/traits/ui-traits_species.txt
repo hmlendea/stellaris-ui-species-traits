@@ -420,3 +420,75 @@ ui_trait_momentary = {
         weight = 0
     }
 }
+
+ui_trait_creative = {
+    cost = 2
+    opposites = { "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.10
+        planet_amenities_mult = 0.10
+    }
+}
+
+ui_trait_very_creative = {
+    cost = 3
+    opposites = { "ui_trait_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.15
+        planet_amenities_mult = 0.15
+    }
+}
+
+ui_trait_extremely_creative = {
+    cost = 5
+    opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = 0.2
+        planet_amenities_mult = 0.2
+    }
+}
+
+ui_trait_uncreative = {
+    cost = -2
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremly_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.10
+        planet_amenities_mult = -0.10
+    }
+}
+
+ui_trait_very_uncreative = {
+    cost = -3
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_extremely_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.15
+        planet_amenities_mult = -0.15
+    }
+}
+
+ui_trait_extremely_uncreative = {
+    cost = -5
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    
+    modifier = {
+        planet_jobs_unity_produces_mult = -0.20
+        planet_amenities_mult = -0.20
+    }
+}

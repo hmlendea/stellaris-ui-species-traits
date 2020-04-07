@@ -224,24 +224,70 @@ ui_trait_sluggish = {
 
 ui_trait_light_eaters = {
   cost = 1
-    opposites = { "ui_trait_gluttonous" }
-    
+    opposites = { "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
     allowed_archetypes = { BIOLOGICAL }
-  
+
     modifier = {
         planet_pops_organics_food_upkeep_mult = -0.10
+    }
+}
+
+ui_trait_very_light_eaters = {
+  cost = 2
+    opposites = { "ui_trait_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = -0.15
+    }
+}
+
+ui_trait_extremely_light_eaters = {
+  cost = 3
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = -0.20
     }
 }
 
 ui_trait_gluttonous = {
     cost = -1
     potential_crossbreeding_chance = 1.0
-    opposites = { "ui_trait_light_eaters" }
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
+
+    allowed_archetypes = { BIOLOGICAL }
+
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = 0.10
+    }
+}
+
+ui_trait_very_gluttonous = {
+    cost = -2
+    potential_crossbreeding_chance = 1.0
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_extremely_gluttonous" }
     
     allowed_archetypes = { BIOLOGICAL }
   
     modifier = {
-        planet_pops_organics_food_upkeep_mult = 0.10
+        planet_pops_organics_food_upkeep_mult = 0.15
+    }
+}
+
+ui_trait_extremely_gluttonous = {
+    cost = -3
+    potential_crossbreeding_chance = 1.0
+    opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" }
+    
+    allowed_archetypes = { BIOLOGICAL }
+  
+    modifier = {
+        planet_pops_organics_food_upkeep_mult = 0.20
     }
 }
 

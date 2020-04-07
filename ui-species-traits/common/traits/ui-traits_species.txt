@@ -198,9 +198,9 @@ ui_trait_pessimistic = {
 
 ui_trait_agile = {
   cost = 2
-    opposites = { "ui_trait_sluggish" }
+    opposites = { "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
     
-    allowed_archetypes = { BIOLOGICAL }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
   
     modifier = {
         weapon_type_kinetic_weapon_fire_rate_mult = 0.05
@@ -209,16 +209,72 @@ ui_trait_agile = {
     }
 }
 
+ui_trait_very_agile = {
+  cost = 3
+    opposites = { "ui_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = 0.07
+        weapon_type_energy_weapon_fire_rate_mult = 0.07
+        weapon_type_explosive_weapon_fire_rate_mult = 0.07
+        army_damage_mult = 0.3
+    }
+}
+
+ui_trait_extremely_agile = {
+  cost = 4
+    opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = 0.10
+        weapon_type_energy_weapon_fire_rate_mult = 0.10
+        weapon_type_explosive_weapon_fire_rate_mult = 0.10
+        army_damage_mult = 0.5
+    }
+}
+
 ui_trait_sluggish = {
   cost = -2
-    opposites = { "ui_trait_agile" }
+    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
     
-    allowed_archetypes = { BIOLOGICAL }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
   
     modifier = {
         weapon_type_kinetic_weapon_fire_rate_mult = -0.05
         weapon_type_energy_weapon_fire_rate_mult = -0.05
         weapon_type_explosive_weapon_fire_rate_mult = -0.05
+    }
+}
+
+ui_trait_very_sluggish = {
+  cost = -3
+    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_extremely_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = -0.07
+        weapon_type_energy_weapon_fire_rate_mult = -0.07
+        weapon_type_explosive_weapon_fire_rate_mult = -0.07
+        army_damage_mult = -0.3
+    }
+}
+
+ui_trait_extremely_sluggish = {
+  cost = -4
+    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" }
+    
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+  
+    modifier = {
+        weapon_type_kinetic_weapon_fire_rate_mult = -0.10
+        weapon_type_energy_weapon_fire_rate_mult = -0.10
+        weapon_type_explosive_weapon_fire_rate_mult = -0.10
+        army_damage_mult = -0.5
     }
 }
 

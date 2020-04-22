@@ -41,7 +41,7 @@ ui_trait_very_docile = {
     opposites = { "trait_docile" "trait_unruly" "ui_trait_very_unruly" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     modifier = {
-        species_empire_size_mult = 0.15
+        species_empire_size_mult = -0.15
     }
 }
 
@@ -51,6 +51,6 @@ ui_trait_very_unruly = {
     opposites = { "trait_docile" "trait_unruly" "ui_trait_very_docile" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     modifier = {
-        species_empire_size_mult = -0.15
+        species_empire_size_mult = 0.15
     }
 }

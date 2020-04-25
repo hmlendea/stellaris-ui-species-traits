@@ -597,7 +597,7 @@ ui_trait_extremely_uncreative = {
 
 ui_trait_demanding = {
     cost = -1
-    opposites = { "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    opposites = { "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -610,7 +610,7 @@ ui_trait_demanding = {
 
 ui_trait_very_demanding = {
     cost = -2
-    opposites = { "trait_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    opposites = { "ui_trait_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -623,7 +623,7 @@ ui_trait_very_demanding = {
 
 ui_trait_extremely_demanding = {
     cost = -3
-    opposites = { "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    opposites = { "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -636,7 +636,7 @@ ui_trait_extremely_demanding = {
 
 ui_trait_undemanding = {
     cost = 1
-    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_very_undemanding" "trait_extremely_undemanding" }
+    opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -649,7 +649,7 @@ ui_trait_undemanding = {
 
 ui_trait_very_undemanding = {
     cost = 2
-    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_extremely_undemanding" }
+    opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_extremely_undemanding" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -662,7 +662,7 @@ ui_trait_very_undemanding = {
 
 ui_trait_extremely_undemanding = {
     cost = 3
-    opposites = { "trait_demanding" "trait_very_demanding" "trait_extremely_demanding" "trait_undemanding" "trait_very_undemanding" }
+    opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     

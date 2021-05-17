@@ -98,7 +98,7 @@ ui_trait_very_nonadaptive = {
     allowed_archetypes = { BIOLOGICAL }
     
     modifier = {
-        pop_environment_tolerance = 0.15
+        pop_environment_tolerance = -0.15
     }
 }
 
@@ -109,7 +109,7 @@ ui_trait_extremely_nonadaptive = {
     allowed_archetypes = { BIOLOGICAL }
     
     modifier = {
-        pop_environment_tolerance = 0.20
+        pop_environment_tolerance = -0.20
     }
     slave_cost = {
         energy = -75

@@ -3,4 +3,4 @@ path="mod/ui-species-traits"
 tags={
     "Species"
 }
-supported_version="3.0.*"
+supported_version="3.2.*"

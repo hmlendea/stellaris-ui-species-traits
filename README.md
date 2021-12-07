@@ -2,7 +2,7 @@
 
 # About
 
-Mod for Stellaris that adds dozens of new species traits, as well as increasing the number of maximum selectable traits.
+Mod for Stellaris that adds [dozens of new species traits](https://github.com/hmlendea/stellaris-ui-species-traits/wiki/Traits), as well as increasing the number of maximum selectable traits.
 
 # Installation
 

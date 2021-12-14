@@ -198,7 +198,7 @@ ui_trait_pessimistic = {
 
 ui_trait_agile = {
   cost = 2
-    opposites = { "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
+    opposites = { "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
   
@@ -239,7 +239,7 @@ ui_trait_extremely_agile = {
 
 ui_trait_sluggish = {
   cost = -2
-    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
+    opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
   
@@ -252,7 +252,7 @@ ui_trait_sluggish = {
 
 ui_trait_very_sluggish = {
   cost = -3
-    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_extremely_sluggish" }
+    opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_extremely_sluggish" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
   
@@ -266,7 +266,7 @@ ui_trait_very_sluggish = {
 
 ui_trait_extremely_sluggish = {
   cost = -4
-    opposites = { "ui_trait_agile" "ui_very_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" }
+    opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
   
@@ -427,7 +427,7 @@ ui_trait_extremely_strong = {
 ui_trait_very_weak = {
     cost = -3
     potential_crossbreeding_chance = 1.0
-    opposites = { "trait_strong" "trait_very_strong" "trait_weak" "uit_trait_extremely_strong" "ui_trait_extremely_weak" }
+    opposites = { "trait_strong" "trait_very_strong" "trait_weak" "ui_trait_extremely_strong" "ui_trait_extremely_weak" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     modifier = {
         army_damage_mult = -0.40
@@ -461,7 +461,7 @@ ui_trait_extremely_weak = {
 ui_trait_long_lived = {
     cost = 2
     potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trai_enduring" "trat_fleeting_lithoid" "trait_fleeting" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL }
     modifier = {
         leader_age = 40
@@ -474,7 +474,7 @@ ui_trait_long_lived = {
 ui_trait_very_long_lived = {
     cost = 3
     potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trai_enduring" "trat_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL }
     modifier = {
         leader_age = 60
@@ -487,7 +487,7 @@ ui_trait_very_long_lived = {
 ui_trait_short_lived = {
     cost = -2
     potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trai_enduring" "trat_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL }
     modifier = {
         leader_age = -20
@@ -500,7 +500,7 @@ ui_trait_short_lived = {
 ui_trait_very_short_lived = {
     cost = -3
     potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trai_enduring" "trat_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_momentary" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL }
     modifier = {
         leader_age = -30
@@ -513,7 +513,7 @@ ui_trait_very_short_lived = {
 ui_trait_momentary = {
     cost = -4
     potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trai_enduring" "trat_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" }
     allowed_archetypes = { BIOLOGICAL }
     modifier = {
         leader_age = -40
@@ -561,7 +561,7 @@ ui_trait_extremely_creative = {
 
 ui_trait_uncreative = {
     cost = -2
-    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremly_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     

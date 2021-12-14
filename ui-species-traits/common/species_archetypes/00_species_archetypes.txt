@@ -16,12 +16,16 @@ ROBOT = {
 MACHINE = {
     species_trait_points = @machine_trait_points
     species_max_traits = @machine_max_traits
+    robotic = yes
 }
 PRESAPIENT = {
     species_trait_points = @species_trait_points
     species_max_traits = @species_max_traits
+    uses_modifiers = no
 }
 LITHOID = {
     inherit_trait_points_from = BIOLOGICAL
 }
-OTHER = {}
+OTHER = {
+    uses_modifiers = no
+}

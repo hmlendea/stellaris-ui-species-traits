@@ -1,14 +1,24 @@
-# Tier scaling policy for modifier effects:
-# - Very tier uses x1.5 of the base trait effect.
-# - Extremely tier uses x2.0 of the base trait effect.
+# Vanilla Strong to Very Strong scaling reference:
+# - Effect ratios are x2.0 for army damage, x2.0 for worker output, and x1.5 for soldier output.
+# - The mean effect factor is (2.0 + 2.0 + 1.5) / 3 = 11/6, approximately x1.833333.
+# - The trait point cost factor is 3/1 = x3.
+# Tier scaling policy:
+# - Very tiers use x11/6 effects and x3 trait point cost.
+# - Extremely tiers increase their corresponding Very effects by 20%.
+# - Positive Extremely costs increase Very costs by 33.333333%, from x3 to x4 of base cost.
+# - Negative tier cost targets use their effect factors because vanilla inverse pairs have x1 cost elasticity.
+# - Negative refunds truncate toward zero, then increase by at least one point for every stronger tier.
+# - The 20% effect uplift is above the 9.090909% minimum implied by vanilla's median x2 upgrades,
+#   while remaining below premium x3 and x4 vanilla upgrade outliers.
+# - Slave prices, assembly scores, AI weights, trigger thresholds, and crossbreeding chances are not scaled.
 
 # Name: Urban
 ui_trait_urban = {
     cost = -2
     opposites = { "trait_agrarian" }
-    
+
     allowed_archetypes = { BIOLOGICAL }
-    
+
     modifier = {
         planet_jobs_food_produces_mult = -0.15
     }
@@ -18,9 +28,9 @@ ui_trait_urban = {
 ui_trait_uneconomical = {
     cost = -2
     opposites = { "trait_ingenious" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_energy_produces_mult = -0.15
     }
@@ -30,9 +40,9 @@ ui_trait_uneconomical = {
 ui_trait_lazy = {
     cost = -2
     opposites = { "trait_industrious" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_minerals_produces_mult = -0.15
     }
@@ -42,9 +52,9 @@ ui_trait_lazy = {
 ui_trait_dumb = {
     cost = -2
     opposites = { "trait_intelligent" "trait_nerve_stapled" "trait_erudite" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_engineering_research_produces_mult = -0.1
         planet_jobs_physics_research_produces_mult = -0.1
@@ -56,9 +66,9 @@ ui_trait_dumb = {
 ui_trait_poor_engineers = {
     cost = -1
     opposites = { "ui_trait_poor_physicists" "ui_trait_poor_sociologists" "trait_natural_engineers" "trait_nerve_stapled" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_engineering_research_produces_mult = -0.15
     }
@@ -68,9 +78,9 @@ ui_trait_poor_engineers = {
 ui_trait_poor_physicists = {
     cost = -1
     opposites = { "ui_trait_poor_engineers" "ui_trait_poor_sociologists" "trait_natural_physicists" "trait_nerve_stapled" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_physics_research_produces_mult = -0.15
     }
@@ -80,9 +90,9 @@ ui_trait_poor_physicists = {
 ui_trait_poor_sociologists = {
     cost = -1
     opposites = { "ui_trait_poor_physicists" "ui_trait_poor_engineers" "trait_natural_sociologists" "trait_nerve_stapled" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_society_research_produces_mult = -0.15
     }
@@ -105,9 +115,9 @@ ui_trait_nonresilient = {
 ui_trait_brave = {
     cost = 2
     opposites = { "ui_trait_craven" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         army_morale = 0.15
         army_damage_mult = 0.15
@@ -118,9 +128,9 @@ ui_trait_brave = {
 ui_trait_craven = {
     cost = -2
     opposites = { "ui_trait_brave" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         army_morale = -0.15
         army_damage_mult = -0.15
@@ -131,9 +141,9 @@ ui_trait_craven = {
 ui_trait_deceitful = {
     cost = 2
     opposites = { "ui_trait_trusting" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         country_influence_produces_mult = 0.1
     }
@@ -143,9 +153,9 @@ ui_trait_deceitful = {
 ui_trait_trusting = {
     cost = -2
     opposites = { "ui_trait_deceitful" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         country_influence_produces_mult = -0.1
     }
@@ -155,9 +165,9 @@ ui_trait_trusting = {
 ui_trait_optimistic = {
     cost = 1
     opposites = { "ui_trait_pessimistic" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         pop_happiness = 0.05
     }
@@ -167,9 +177,9 @@ ui_trait_optimistic = {
 ui_trait_pessimistic = {
     cost = -1
     opposites = { "ui_trait_optimistic" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         pop_happiness = -0.05
     }
@@ -179,9 +189,9 @@ ui_trait_pessimistic = {
 ui_trait_agile = {
   cost = 2
     opposites = { "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-  
+
     modifier = {
         weapon_type_kinetic_weapon_fire_rate_mult = 0.05
         weapon_type_energy_weapon_fire_rate_mult = 0.05
@@ -191,29 +201,29 @@ ui_trait_agile = {
 
 # Name: Very Agile
 ui_trait_very_agile = {
-  cost = 3
+    cost = 6
     opposites = { "ui_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-  
+
     modifier = {
-        weapon_type_kinetic_weapon_fire_rate_mult = 0.075
-        weapon_type_energy_weapon_fire_rate_mult = 0.075
-        weapon_type_explosive_weapon_fire_rate_mult = 0.075
+        weapon_type_kinetic_weapon_fire_rate_mult = 0.091667
+        weapon_type_energy_weapon_fire_rate_mult = 0.091667
+        weapon_type_explosive_weapon_fire_rate_mult = 0.091667
     }
 }
 
 # Name: Extremely Agile
 ui_trait_extremely_agile = {
-  cost = 4
+    cost = 8
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-  
+
     modifier = {
-        weapon_type_kinetic_weapon_fire_rate_mult = 0.10
-        weapon_type_energy_weapon_fire_rate_mult = 0.10
-        weapon_type_explosive_weapon_fire_rate_mult = 0.10
+        weapon_type_kinetic_weapon_fire_rate_mult = 0.11
+        weapon_type_energy_weapon_fire_rate_mult = 0.11
+        weapon_type_explosive_weapon_fire_rate_mult = 0.11
     }
 }
 
@@ -221,9 +231,9 @@ ui_trait_extremely_agile = {
 ui_trait_sluggish = {
   cost = -2
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-  
+
     modifier = {
         weapon_type_kinetic_weapon_fire_rate_mult = -0.05
         weapon_type_energy_weapon_fire_rate_mult = -0.05
@@ -233,29 +243,29 @@ ui_trait_sluggish = {
 
 # Name: Very Sluggish
 ui_trait_very_sluggish = {
-  cost = -3
+    cost = -3
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_extremely_sluggish" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-  
+
     modifier = {
-        weapon_type_kinetic_weapon_fire_rate_mult = -0.075
-        weapon_type_energy_weapon_fire_rate_mult = -0.075
-        weapon_type_explosive_weapon_fire_rate_mult = -0.075
+        weapon_type_kinetic_weapon_fire_rate_mult = -0.091667
+        weapon_type_energy_weapon_fire_rate_mult = -0.091667
+        weapon_type_explosive_weapon_fire_rate_mult = -0.091667
     }
 }
 
 # Name: Extremely Sluggish
 ui_trait_extremely_sluggish = {
-  cost = -4
+    cost = -4
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-  
+
     modifier = {
-        weapon_type_kinetic_weapon_fire_rate_mult = -0.10
-        weapon_type_energy_weapon_fire_rate_mult = -0.10
-        weapon_type_explosive_weapon_fire_rate_mult = -0.10
+        weapon_type_kinetic_weapon_fire_rate_mult = -0.11
+        weapon_type_energy_weapon_fire_rate_mult = -0.11
+        weapon_type_explosive_weapon_fire_rate_mult = -0.11
     }
 }
 
@@ -273,25 +283,25 @@ ui_trait_light_eaters = {
 
 # Name: Very Light Eaters
 ui_trait_very_light_eaters = {
-  cost = 2
+    cost = 3
     opposites = { "ui_trait_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
 
     allowed_archetypes = { BIOLOGICAL }
 
     modifier = {
-        planet_pops_organics_food_upkeep_mult = -0.15
+        planet_pops_organics_food_upkeep_mult = -0.183333
     }
 }
 
 # Name: Extremely Light Eaters
 ui_trait_extremely_light_eaters = {
-  cost = 3
+    cost = 4
     opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
 
     allowed_archetypes = { BIOLOGICAL }
 
     modifier = {
-        planet_pops_organics_food_upkeep_mult = -0.20
+        planet_pops_organics_food_upkeep_mult = -0.22
     }
 }
 
@@ -313,11 +323,11 @@ ui_trait_very_gluttonous = {
     cost = -2
     potential_crossbreeding_chance = 1.0
     opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_extremely_gluttonous" }
-    
+
     allowed_archetypes = { BIOLOGICAL }
-  
+
     modifier = {
-        planet_pops_organics_food_upkeep_mult = 0.15
+        planet_pops_organics_food_upkeep_mult = 0.183333
     }
 }
 
@@ -326,11 +336,11 @@ ui_trait_extremely_gluttonous = {
     cost = -3
     potential_crossbreeding_chance = 1.0
     opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" }
-    
+
     allowed_archetypes = { BIOLOGICAL }
-  
+
     modifier = {
-        planet_pops_organics_food_upkeep_mult = 0.20
+        planet_pops_organics_food_upkeep_mult = 0.22
     }
 }
 
@@ -338,9 +348,9 @@ ui_trait_extremely_gluttonous = {
 ui_trait_creative = {
     cost = 2
     opposites = { "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_unity_produces_mult = 0.10
         planet_amenities_mult = 0.10
@@ -349,27 +359,27 @@ ui_trait_creative = {
 
 # Name: Very Creative
 ui_trait_very_creative = {
-    cost = 3
+    cost = 6
     opposites = { "ui_trait_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        planet_jobs_unity_produces_mult = 0.15
-        planet_amenities_mult = 0.15
+        planet_jobs_unity_produces_mult = 0.183333
+        planet_amenities_mult = 0.183333
     }
 }
 
 # Name: Extremely Creative
 ui_trait_extremely_creative = {
-    cost = 5
+    cost = 8
     opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        planet_jobs_unity_produces_mult = 0.2
-        planet_amenities_mult = 0.2
+        planet_jobs_unity_produces_mult = 0.22
+        planet_amenities_mult = 0.22
     }
 }
 
@@ -377,9 +387,9 @@ ui_trait_extremely_creative = {
 ui_trait_uncreative = {
     cost = -2
     opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         planet_jobs_unity_produces_mult = -0.10
         planet_amenities_mult = -0.10
@@ -390,25 +400,25 @@ ui_trait_uncreative = {
 ui_trait_very_uncreative = {
     cost = -3
     opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_extremely_uncreative" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        planet_jobs_unity_produces_mult = -0.15
-        planet_amenities_mult = -0.15
+        planet_jobs_unity_produces_mult = -0.183333
+        planet_amenities_mult = -0.183333
     }
 }
 
 # Name: Extremely Uncreative
 ui_trait_extremely_uncreative = {
-    cost = -5
+    cost = -4
     opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        planet_jobs_unity_produces_mult = -0.20
-        planet_amenities_mult = -0.20
+        planet_jobs_unity_produces_mult = -0.22
+        planet_amenities_mult = -0.22
     }
 }
 
@@ -416,9 +426,9 @@ ui_trait_extremely_uncreative = {
 ui_trait_demanding = {
     cost = -1
     opposites = { "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         pop_amenities_usage_mult = 0.10
         planet_pops_consumer_goods_upkeep_mult = 0.01
@@ -430,13 +440,13 @@ ui_trait_demanding = {
 ui_trait_very_demanding = {
     cost = -2
     opposites = { "ui_trait_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        pop_amenities_usage_mult = 0.15
-        planet_pops_consumer_goods_upkeep_mult = 0.015
-        pop_housing_usage_mult = 0.015
+        pop_amenities_usage_mult = 0.183333
+        planet_pops_consumer_goods_upkeep_mult = 0.018333
+        pop_housing_usage_mult = 0.018333
     }
 }
 
@@ -444,13 +454,13 @@ ui_trait_very_demanding = {
 ui_trait_extremely_demanding = {
     cost = -3
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        pop_amenities_usage_mult = 0.20
-        planet_pops_consumer_goods_upkeep_mult = 0.02
-        pop_housing_usage_mult = 0.02
+        pop_amenities_usage_mult = 0.22
+        planet_pops_consumer_goods_upkeep_mult = 0.022
+        pop_housing_usage_mult = 0.022
     }
 }
 
@@ -458,9 +468,9 @@ ui_trait_extremely_demanding = {
 ui_trait_undemanding = {
     cost = 1
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
         pop_amenities_usage_mult = -0.10
         planet_pops_consumer_goods_upkeep_mult = -0.01
@@ -470,28 +480,28 @@ ui_trait_undemanding = {
 
 # Name: Very Undemanding
 ui_trait_very_undemanding = {
-    cost = 2
+    cost = 3
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_extremely_undemanding" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        pop_amenities_usage_mult = -0.15
-        planet_pops_consumer_goods_upkeep_mult = -0.015
-        pop_housing_usage_mult = -0.015
+        pop_amenities_usage_mult = -0.183333
+        planet_pops_consumer_goods_upkeep_mult = -0.018333
+        pop_housing_usage_mult = -0.018333
     }
 }
 
 # Name: Extremely Undemanding
 ui_trait_extremely_undemanding = {
-    cost = 3
+    cost = 4
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" }
-    
+
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    
+
     modifier = {
-        pop_amenities_usage_mult = -0.20
-        planet_pops_consumer_goods_upkeep_mult = -0.02
-        pop_housing_usage_mult = -0.02
+        pop_amenities_usage_mult = -0.22
+        planet_pops_consumer_goods_upkeep_mult = -0.022
+        pop_housing_usage_mult = -0.022
     }
 }

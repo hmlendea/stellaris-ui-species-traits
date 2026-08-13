@@ -9,7 +9,6 @@ A Stellaris mod that adds 58 custom species traits, extends several trait famili
 ## 📑 Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Demo](#demo)
 - [Capabilities](#capabilities)
 - [Usage](#usage)
 - [Known Limitations](#known-limitations)
@@ -23,10 +22,6 @@ A Stellaris mod that adds 58 custom species traits, extends several trait famili
 - [Related Projects](#related-projects)
 - [Project Engagement](#project-engagement)
 - [License](#license)
-
-## 🎬 Demo
-
-![Universum Infinitum Species Traits cover artwork](.github/cover.png)
 
 ## ✨ Capabilities
 

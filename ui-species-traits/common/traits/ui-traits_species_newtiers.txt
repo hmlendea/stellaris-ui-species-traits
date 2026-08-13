@@ -1,5 +1,8 @@
 # Additional custom tiers for vanilla species traits.
 # Each entry extends a vanilla trait line with stronger/weaker tier variants.
+# Scaling policy:
+# - Very tier uses x2 scaling for numeric values from the vanilla base trait.
+# - Extremely tier uses x3 scaling for numeric values from the vanilla base trait.
 
 # Name: Extremely Nonadaptive
 # Group: Adaptability

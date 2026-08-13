@@ -1,8 +1,10 @@
 # Additional custom tiers for vanilla species traits.
 # Each entry extends a vanilla trait line with stronger/weaker tier variants.
-# Scaling policy:
-# - Very tier uses x2 scaling for numeric values from the vanilla base trait.
-# - Extremely tier uses x3 scaling for numeric values from the vanilla base trait.
+# Vanilla reference: Adaptive has +10% habitability and Extremely Adaptive has +20%.
+# Tier scaling policy for modifier effects:
+# - Very tier uses x1.5 of the base trait effect.
+# - Extremely tier uses x2.0 of the base trait effect.
+# - Discrete count modifiers are rounded away from zero to the nearest valid integer.
 
 # Name: Extremely Nonadaptive
 # Group: Adaptability
@@ -12,17 +14,42 @@ ui_trait_extremely_nonadaptive = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_nonadaptive" }
+    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_adaptive" "ui_trait_very_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative habitability }
     modifier = {
-        pop_environment_tolerance = -0.30
+        pop_environment_tolerance = -0.20
     }
     slave_cost = {
         trade = -600
     }
     ai_weight = {
         weight = 0
+    }
+}
+
+# Name: Very Adaptive
+# Group: Adaptability
+ui_trait_very_adaptive = {
+    cost = 3
+    category = normal
+    species_possible_add = {
+        can_add_genetic_traits = yes
+    }
+    species_possible_remove = {
+        can_remove_beneficial_genetic_traits = yes
+    }
+    species_possible_merge_remove = {
+        always = yes
+    }
+    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_terraphobic" "ui_trait_very_nonadaptive" "ui_trait_extremely_nonadaptive" }
+    allowed_archetypes = { BIOLOGICAL }
+    tags = { organic positive habitability }
+    modifier = {
+        pop_environment_tolerance = 0.15
+    }
+    slave_cost = {
+        trade = 750
     }
 }
 
@@ -34,11 +61,11 @@ ui_trait_very_nonadaptive = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_extremely_nonadaptive" }
+    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_adaptive" "ui_trait_extremely_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative habitability }
     modifier = {
-        pop_environment_tolerance = -0.20
+        pop_environment_tolerance = -0.15
     }
     slave_cost = {
         trade = -400
@@ -69,7 +96,7 @@ ui_trait_extremely_rapid_breeders = {
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic positive pop_growth }
     modifier = {
-        logistic_growth_mult = 0.3
+        logistic_growth_mult = 0.20
     }
     slave_cost = {
         trade = 3000
@@ -88,7 +115,7 @@ ui_trait_extremely_slow_breeders = {
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative pop_growth }
     modifier = {
-        logistic_growth_mult = -0.3
+        logistic_growth_mult = -0.20
     }
     slave_cost = {
         trade = -3000
@@ -119,7 +146,7 @@ ui_trait_very_rapid_breeders = {
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic positive pop_growth }
     modifier = {
-        logistic_growth_mult = 0.2
+        logistic_growth_mult = 0.15
     }
     slave_cost = {
         trade = 2000
@@ -138,7 +165,7 @@ ui_trait_very_slow_breeders = {
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative pop_growth }
     modifier = {
-        logistic_growth_mult = -0.2
+        logistic_growth_mult = -0.15
     }
     slave_cost = {
         trade = -2000
@@ -166,7 +193,7 @@ ui_trait_very_docile = {
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic positive empire_size }
     modifier = {
-        species_empire_size_mult = -0.20
+        species_empire_size_mult = -0.15
     }
     slave_cost = {
         trade = 1000
@@ -185,7 +212,7 @@ ui_trait_very_unruly = {
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic negative empire_size }
     modifier = {
-        species_empire_size_mult = 0.20
+        species_empire_size_mult = 0.15
     }
     slave_cost = {
         trade = -400
@@ -320,7 +347,7 @@ ui_trait_very_quarrelsome = {
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic negative pop_output unity }
     modifier = {
-        bureaucrat_jobs_bonus_workforce_mult = -0.2
+        bureaucrat_jobs_bonus_workforce_mult = -0.15
     }
     ai_weight = {
         weight = 1
@@ -358,18 +385,18 @@ ui_trait_very_traditional = {
     }
     tags = { organic positive pop_output unity }
     modifier = {
-        bureaucrat_jobs_bonus_workforce_mult = 0.2
+        bureaucrat_jobs_bonus_workforce_mult = 0.15
     }
     slave_cost = {
         trade = 1000
     }
     assembly_score = {
         modifier = {
-            add = 3.0
+            add = 2.25
             from = { has_unity_designation = yes }
         }
         modifier = {
-            add = 3.0
+            add = 2.25
             from = { has_building = building_order_keep }
         }
     }
@@ -393,16 +420,16 @@ ui_trait_extremely_strong = {
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic positive pop_output army }
     modifier = {
-        army_damage_mult = 0.60
-        worker_and_simple_drone_cat_bonus_workforce_mult = 0.075
-        soldier_jobs_bonus_workforce_mult = 0.30
+        army_damage_mult = 0.40
+        worker_and_simple_drone_cat_bonus_workforce_mult = 0.050
+        soldier_jobs_bonus_workforce_mult = 0.20
     }
     slave_cost = {
         trade = 3000
     }
     assembly_score = {
         modifier = {
-            add = 0.75
+            add = 0.50
             from = {
                 OR = {
                     has_farming_designation = yes
@@ -413,7 +440,7 @@ ui_trait_extremely_strong = {
             }
         }
         modifier = {
-            add = 2.25
+            add = 1.50
             from = {
                 has_fortress_designation = yes
             }
@@ -433,9 +460,9 @@ ui_trait_extremely_weak = {
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic negative pop_output army }
     modifier = {
-        army_damage_mult = -0.60
-        worker_and_simple_drone_cat_bonus_workforce_mult = -0.075
-        soldier_jobs_bonus_workforce_mult = -0.30
+        army_damage_mult = -0.40
+        worker_and_simple_drone_cat_bonus_workforce_mult = -0.050
+        soldier_jobs_bonus_workforce_mult = -0.20
     }
     slave_cost = {
         trade = -3000
@@ -457,9 +484,9 @@ ui_trait_very_weak = {
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic negative pop_output army }
     modifier = {
-        army_damage_mult = -0.40
-        worker_and_simple_drone_cat_bonus_workforce_mult = -0.050
-        soldier_jobs_bonus_workforce_mult = -0.20
+        army_damage_mult = -0.30
+        worker_and_simple_drone_cat_bonus_workforce_mult = -0.0375
+        soldier_jobs_bonus_workforce_mult = -0.15
     }
     slave_cost = {
         trade = -2000
@@ -491,6 +518,6 @@ ui_trait_very_talented = {
     }
     modifier = {
         negative_leader_traits_species = -2
-        leaders_upkeep_mult = -0.2
+        leaders_upkeep_mult = -0.15
     }
 }

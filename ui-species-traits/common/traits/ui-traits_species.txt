@@ -1,3 +1,4 @@
+# Name: Urban
 ui_trait_urban = {
     cost = -2
     opposites = { "trait_agrarian" }
@@ -9,6 +10,7 @@ ui_trait_urban = {
     }
 }
 
+# Name: Uneconomical
 ui_trait_uneconomical = {
     cost = -2
     opposites = { "trait_thrifty" }
@@ -20,6 +22,7 @@ ui_trait_uneconomical = {
     }
 }
 
+# Name: Lazy
 ui_trait_lazy = {
     cost = -2
     opposites = { "trait_industrious" }
@@ -31,6 +34,7 @@ ui_trait_lazy = {
     }
 }
 
+# Name: Dumb
 ui_trait_dumb = {
     cost = -2
     opposites = { "trait_intelligent" "trait_nerve_stapled" "trait_erudite" }
@@ -44,6 +48,7 @@ ui_trait_dumb = {
     }
 }
 
+# Name: Poor Engineers
 ui_trait_poor_engineers = {
     cost = -1
     opposites = { "ui_trait_poor_physicists" "ui_trait_poor_sociologists" "trait_natural_engineers" "trait_nerve_stapled" }
@@ -55,6 +60,7 @@ ui_trait_poor_engineers = {
     }
 }
 
+# Name: Poor Physicists
 ui_trait_poor_physicists = {
     cost = -1
     opposites = { "ui_trait_poor_engineers" "ui_trait_poor_sociologists" "trait_natural_physicists" "trait_nerve_stapled" }
@@ -66,6 +72,7 @@ ui_trait_poor_physicists = {
     }
 }
 
+# Name: Poor Sociologists
 ui_trait_poor_sociologists = {
     cost = -1
     opposites = { "ui_trait_poor_physicists" "ui_trait_poor_engineers" "trait_natural_sociologists" "trait_nerve_stapled" }
@@ -77,45 +84,7 @@ ui_trait_poor_sociologists = {
     }
 }
 
-ui_trait_very_adaptive = {
-    cost = 3
-    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "ui_trait_very_nonadaptive" "ui_trait_extremely_nonadaptive" }
-    
-    allowed_archetypes = { BIOLOGICAL }
-    
-    modifier = {
-        pop_environment_tolerance = 0.15
-    }
-    slave_cost = {
-        energy = 75
-    }
-}
-
-ui_trait_very_nonadaptive = {
-    cost = -3
-    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "ui_trait_very_adaptive" "ui_trait_extremely_nonadaptive" }
-    
-    allowed_archetypes = { BIOLOGICAL }
-    
-    modifier = {
-        pop_environment_tolerance = -0.15
-    }
-}
-
-ui_trait_extremely_nonadaptive = {
-    cost = -4
-    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "ui_trait_very_adaptive" "ui_trait_very_nonadaptive" }
-    
-    allowed_archetypes = { BIOLOGICAL }
-    
-    modifier = {
-        pop_environment_tolerance = -0.20
-    }
-    slave_cost = {
-        energy = -75
-    }
-}
-
+# Name: Nonresilient
 ui_trait_nonresilient = {
     cost = -1
     opposites = { "trait_resilient"}
@@ -124,10 +93,11 @@ ui_trait_nonresilient = {
         army_defense_damage_mult = -0.5
     }
     slave_cost = {
-        energy = -100
+        trade = -100
     }
 }
 
+# Name: Brave
 ui_trait_brave = {
     cost = 2
     opposites = { "ui_trait_craven" }
@@ -140,6 +110,7 @@ ui_trait_brave = {
     }
 }
 
+# Name: Craven
 ui_trait_craven = {
     cost = -2
     opposites = { "ui_trait_brave" }
@@ -152,6 +123,7 @@ ui_trait_craven = {
     }
 }
 
+# Name: Deceitful
 ui_trait_deceitful = {
     cost = 2
     opposites = { "ui_trait_trusting" }
@@ -163,6 +135,7 @@ ui_trait_deceitful = {
     }
 }
 
+# Name: Trusting
 ui_trait_trusting = {
     cost = -2
     opposites = { "ui_trait_deceitful" }
@@ -174,6 +147,7 @@ ui_trait_trusting = {
     }
 }
 
+# Name: Optimistic
 ui_trait_optimistic = {
     cost = 1
     opposites = { "ui_trait_pessimistic" }
@@ -185,6 +159,7 @@ ui_trait_optimistic = {
     }
 }
 
+# Name: Pessimistic
 ui_trait_pessimistic = {
     cost = -1
     opposites = { "ui_trait_optimistic" }
@@ -196,6 +171,7 @@ ui_trait_pessimistic = {
     }
 }
 
+# Name: Agile
 ui_trait_agile = {
   cost = 2
     opposites = { "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
@@ -209,6 +185,7 @@ ui_trait_agile = {
     }
 }
 
+# Name: Very Agile
 ui_trait_very_agile = {
   cost = 3
     opposites = { "ui_trait_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
@@ -223,6 +200,7 @@ ui_trait_very_agile = {
     }
 }
 
+# Name: Extremely Agile
 ui_trait_extremely_agile = {
   cost = 4
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
@@ -237,6 +215,7 @@ ui_trait_extremely_agile = {
     }
 }
 
+# Name: Sluggish
 ui_trait_sluggish = {
   cost = -2
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_very_sluggish" "ui_trait_extremely_sluggish" }
@@ -250,6 +229,7 @@ ui_trait_sluggish = {
     }
 }
 
+# Name: Very Sluggish
 ui_trait_very_sluggish = {
   cost = -3
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_extremely_sluggish" }
@@ -264,6 +244,7 @@ ui_trait_very_sluggish = {
     }
 }
 
+# Name: Extremely Sluggish
 ui_trait_extremely_sluggish = {
   cost = -4
     opposites = { "ui_trait_agile" "ui_trait_very_agile" "ui_trait_extremely_agile" "ui_trait_sluggish" "ui_trait_very_sluggish" }
@@ -278,6 +259,7 @@ ui_trait_extremely_sluggish = {
     }
 }
 
+# Name: Light Eaters
 ui_trait_light_eaters = {
   cost = 1
     opposites = { "ui_trait_very_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
@@ -289,6 +271,7 @@ ui_trait_light_eaters = {
     }
 }
 
+# Name: Very Light Eaters
 ui_trait_very_light_eaters = {
   cost = 2
     opposites = { "ui_trait_light_eaters" "ui_trait_extremely_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
@@ -300,6 +283,7 @@ ui_trait_very_light_eaters = {
     }
 }
 
+# Name: Extremely Light Eaters
 ui_trait_extremely_light_eaters = {
   cost = 3
     opposites = { "ui_trait_light_eaters" "ui_trait_very_light_eaters" "ui_trait_gluttonous" "ui_trait_very_gluttonous" "ui_trait_extremely_gluttonous" }
@@ -311,6 +295,7 @@ ui_trait_extremely_light_eaters = {
     }
 }
 
+# Name: Gluttonous
 ui_trait_gluttonous = {
     cost = -1
     potential_crossbreeding_chance = 1.0
@@ -323,6 +308,7 @@ ui_trait_gluttonous = {
     }
 }
 
+# Name: Very Gluttonous
 ui_trait_very_gluttonous = {
     cost = -2
     potential_crossbreeding_chance = 1.0
@@ -335,6 +321,7 @@ ui_trait_very_gluttonous = {
     }
 }
 
+# Name: Extremely Gluttonous
 ui_trait_extremely_gluttonous = {
     cost = -3
     potential_crossbreeding_chance = 1.0
@@ -347,182 +334,7 @@ ui_trait_extremely_gluttonous = {
     }
 }
 
-ui_trait_very_rapid_breeders = {
-    cost = 4;
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_rapid_breeders" "trait_slow_breeders" "trait_fertile" "ui_trait_extremely_rapid_breeders" "ui_trait_very_slow_breeders" "ui_trait_extremely_slow_breeders" }
-
-    allowed_archetypes = { BIOLOGICAL }
-
-    modifier = {
-        pop_growth_speed = 0.20
-    }
-    slave_cost = {
-        energy = 200
-    }
-}
-
-ui_trait_extremely_rapid_breeders = {
-    cost = 6;
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_rapid_breeders" "trait_slow_breeders" "trait_fertile" "ui_trait_very_rapid_breeders" "ui_trait_very_slow_breeders" "ui_trait_extremely_slow_breeders" }
-
-    allowed_archetypes = { BIOLOGICAL }
-
-    modifier = {
-        pop_growth_speed = 0.40
-    }
-    slave_cost = {
-        energy = 400
-    }
-}
-
-ui_trait_very_slow_breeders = {
-    cost = -4
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_rapid_breeders" "trait_slow_breeders" "trait_fertile" "ui_trait_very_rapid_breeders" "ui_trait_extremely_rapid_breeders" "ui_trait_extremely_slow_breeders" }
-
-    allowed_archetypes = { BIOLOGICAL }
-
-    modifier = {
-        pop_growth_speed = -0.20
-    }
-    slave_cost = {
-        energy = -200
-    }
-}
-
-ui_trait_extremely_slow_breeders = {
-    cost = -6
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_rapid_breeders" "trait_slow_breeders" "trait_fertile" "ui_trait_very_rapid_breeders" "ui_trait_extremely_rapid_breeders" "ui_trait_very_slow_breeders" }
-
-    allowed_archetypes = { BIOLOGICAL }
-
-    modifier = {
-        pop_growth_speed = -0.40
-    }
-    slave_cost = {
-        energy = -400
-    }
-}
-
-ui_trait_extremely_strong = {
-    cost = 5
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_strong" "trait_very_strong" "trait_weak" "ui_trait_very_weak" }
-    allowed_archetypes = { BIOLOGICAL LITHOID }
-    modifier = {
-        army_damage_mult = 0.60
-        planet_jobs_worker_produces_mult = 0.075
-    }
-    slave_cost = {
-        energy = 150
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_very_weak = {
-    cost = -3
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_strong" "trait_very_strong" "trait_weak" "ui_trait_extremely_strong" "ui_trait_extremely_weak" }
-    allowed_archetypes = { BIOLOGICAL LITHOID }
-    modifier = {
-        army_damage_mult = -0.40
-        planet_jobs_worker_produces_mult = -0.05
-    }
-    slave_cost = {
-        energy = -100
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_extremely_weak = {
-    cost = -5
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_strong" "trait_very_strong" "trait_weak" "ui_trait_extremely_strong" "ui_trait_very_weak" }
-    allowed_archetypes = { BIOLOGICAL LITHOID }
-    modifier = {
-        army_damage_mult = -0.60
-        planet_jobs_worker_produces_mult = -0.075
-    }
-    slave_cost = {
-        energy = -150
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_long_lived = {
-    cost = 2
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
-    allowed_archetypes = { BIOLOGICAL }
-    modifier = {
-        leader_age = 40
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_very_long_lived = {
-    cost = 3
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
-    allowed_archetypes = { BIOLOGICAL }
-    modifier = {
-        leader_age = 60
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_short_lived = {
-    cost = -2
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
-    allowed_archetypes = { BIOLOGICAL }
-    modifier = {
-        leader_age = -20
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_very_short_lived = {
-    cost = -3
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_momentary" }
-    allowed_archetypes = { BIOLOGICAL }
-    modifier = {
-        leader_age = -30
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
-ui_trait_momentary = {
-    cost = -4
-    potential_crossbreeding_chance = 1.0
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_fleeting" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" }
-    allowed_archetypes = { BIOLOGICAL }
-    modifier = {
-        leader_age = -40
-    }
-    ai_weight = {
-        weight = 0
-    }
-}
-
+# Name: Creative
 ui_trait_creative = {
     cost = 2
     opposites = { "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
@@ -535,6 +347,7 @@ ui_trait_creative = {
     }
 }
 
+# Name: Very Creative
 ui_trait_very_creative = {
     cost = 3
     opposites = { "ui_trait_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
@@ -547,6 +360,7 @@ ui_trait_very_creative = {
     }
 }
 
+# Name: Extremely Creative
 ui_trait_extremely_creative = {
     cost = 5
     opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
@@ -559,6 +373,7 @@ ui_trait_extremely_creative = {
     }
 }
 
+# Name: Uncreative
 ui_trait_uncreative = {
     cost = -2
     opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
@@ -571,6 +386,7 @@ ui_trait_uncreative = {
     }
 }
 
+# Name: Very Uncreative
 ui_trait_very_uncreative = {
     cost = -3
     opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_extremely_uncreative" }
@@ -583,6 +399,7 @@ ui_trait_very_uncreative = {
     }
 }
 
+# Name: Extremely Uncreative
 ui_trait_extremely_uncreative = {
     cost = -5
     opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" }
@@ -595,6 +412,7 @@ ui_trait_extremely_uncreative = {
     }
 }
 
+# Name: Demanding
 ui_trait_demanding = {
     cost = -1
     opposites = { "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
@@ -608,6 +426,7 @@ ui_trait_demanding = {
     }
 }
 
+# Name: Very Demanding
 ui_trait_very_demanding = {
     cost = -2
     opposites = { "ui_trait_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
@@ -621,6 +440,7 @@ ui_trait_very_demanding = {
     }
 }
 
+# Name: Extremely Demanding
 ui_trait_extremely_demanding = {
     cost = -3
     opposites = { "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
@@ -634,6 +454,7 @@ ui_trait_extremely_demanding = {
     }
 }
 
+# Name: Undemanding
 ui_trait_undemanding = {
     cost = 1
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_very_undemanding" "ui_trait_extremely_undemanding" }
@@ -647,6 +468,7 @@ ui_trait_undemanding = {
     }
 }
 
+# Name: Very Undemanding
 ui_trait_very_undemanding = {
     cost = 2
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_extremely_undemanding" }
@@ -660,6 +482,7 @@ ui_trait_very_undemanding = {
     }
 }
 
+# Name: Extremely Undemanding
 ui_trait_extremely_undemanding = {
     cost = 3
     opposites = { "ui_trait_demanding" "ui_trait_very_demanding" "ui_trait_extremely_demanding" "ui_trait_undemanding" "ui_trait_very_undemanding" }

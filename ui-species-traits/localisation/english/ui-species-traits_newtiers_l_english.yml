@@ -1,4 +1,4 @@
-l_english:
+﻿l_english:
 
  ui_trait_extremely_nonadaptive_desc:0 "§LThis species finds it incredibly hard to adapt to new environments, limiting them to mostly just their accustomed environments.§!\n"
  ui_trait_extremely_nonadaptive:0 "Extremely Nonadaptive"
@@ -16,8 +16,6 @@ l_english:
  ui_trait_momentary:0 "Momentary"
  ui_trait_short_lived_desc:0 "§LThe individuals of this species live short lives, making them unable to achieve much before their deaths.§!\n"
  ui_trait_short_lived:0 "Short-lived"
- ui_trait_very_adaptive_desc:0 "§LThis species if very adaptive to most foreign environments.§!\n"
- ui_trait_very_adaptive:0 "Very Adaptive"
  ui_trait_very_docile_desc:0 "§LMembers of this species are very easy to manage and organize. They tend to be very cooperative and amicable.§!"
  ui_trait_very_docile:0 "Very Docile"
  ui_trait_very_long_lived_desc:0 "§LThe individuals of this species live very long lives, making them able to achieve much more before their deaths.§!\n"

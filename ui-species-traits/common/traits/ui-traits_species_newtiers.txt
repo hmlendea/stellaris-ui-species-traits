@@ -12,7 +12,7 @@ ui_trait_extremely_nonadaptive = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_adaptive" "ui_trait_very_nonadaptive" }
+    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative habitability }
     modifier = {
@@ -26,31 +26,6 @@ ui_trait_extremely_nonadaptive = {
     }
 }
 
-# Name: Very Adaptive
-# Group: Adaptability
-ui_trait_very_adaptive = {
-    cost = 4
-    category = normal
-    species_possible_add = {
-        can_add_genetic_traits = yes
-    }
-    species_possible_remove = {
-        can_remove_beneficial_genetic_traits = yes
-    }
-    species_possible_merge_remove = {
-        always = yes
-    }
-    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_terraphobic" "ui_trait_very_nonadaptive" "ui_trait_extremely_nonadaptive" }
-    allowed_archetypes = { BIOLOGICAL }
-    tags = { organic positive habitability }
-    modifier = {
-        pop_environment_tolerance = 0.20
-    }
-    slave_cost = {
-        trade = 1000
-    }
-}
-
 # Name: Very Nonadaptive
 # Group: Adaptability
 ui_trait_very_nonadaptive = {
@@ -59,7 +34,7 @@ ui_trait_very_nonadaptive = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_adaptive" "ui_trait_extremely_nonadaptive" }
+    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_extremely_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative habitability }
     modifier = {

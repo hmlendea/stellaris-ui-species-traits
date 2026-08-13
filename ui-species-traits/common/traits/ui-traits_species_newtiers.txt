@@ -14,7 +14,7 @@ ui_trait_extremely_nonadaptive = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_adaptive" "ui_trait_very_nonadaptive" }
+    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "trait_pathogenic_genes" "ui_trait_very_adaptive" "ui_trait_very_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative habitability }
     modifier = {
@@ -42,7 +42,7 @@ ui_trait_very_adaptive = {
     species_possible_merge_remove = {
         always = yes
     }
-    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_terraphobic" "ui_trait_very_nonadaptive" "ui_trait_extremely_nonadaptive" }
+    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_terraphobic" "trait_pathogenic_genes" "ui_trait_very_nonadaptive" "ui_trait_extremely_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic positive habitability }
     modifier = {
@@ -61,7 +61,7 @@ ui_trait_very_nonadaptive = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "ui_trait_very_adaptive" "ui_trait_extremely_nonadaptive" }
+    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive" "trait_robust" "trait_adaptive_lithoid" "trait_shelled" "trait_permeable_skin" "trait_genetic_memory" "trait_pathogenic_genes" "ui_trait_very_adaptive" "ui_trait_extremely_nonadaptive" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative habitability }
     modifier = {
@@ -92,7 +92,7 @@ ui_trait_extremely_rapid_breeders = {
     species_possible_merge_remove = {
         always = yes
     }
-    opposites = { "trait_pyroclastic" "trait_slow_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "ui_trait_very_slow_breeders" "ui_trait_extremely_slow_breeders" "ui_trait_very_rapid_breeders" }
+    opposites = { "trait_pyroclastic" "trait_rapid_breeders" "trait_slow_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "trait_incubator" "trait_pathogenic_genes" "ui_trait_very_slow_breeders" "ui_trait_extremely_slow_breeders" "ui_trait_very_rapid_breeders" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic positive pop_growth }
     modifier = {
@@ -111,7 +111,7 @@ ui_trait_extremely_slow_breeders = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_pyroclastic" "trait_rapid_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_psychological_infertility" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "trait_nascent_stage" "ui_trait_very_rapid_breeders" "ui_trait_extremely_rapid_breeders" "ui_trait_very_slow_breeders" }
+    opposites = { "trait_pyroclastic" "trait_slow_breeders" "trait_rapid_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_psychological_infertility" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "trait_nascent_stage" "trait_incubator" "trait_pathogenic_genes" "ui_trait_very_rapid_breeders" "ui_trait_extremely_rapid_breeders" "ui_trait_very_slow_breeders" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative pop_growth }
     modifier = {
@@ -142,7 +142,7 @@ ui_trait_very_rapid_breeders = {
     species_possible_merge_remove = {
         always = yes
     }
-    opposites = { "trait_pyroclastic" "trait_slow_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "ui_trait_very_slow_breeders" "ui_trait_extremely_slow_breeders" "ui_trait_extremely_rapid_breeders" }
+    opposites = { "trait_pyroclastic" "trait_rapid_breeders" "trait_slow_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "trait_incubator" "trait_pathogenic_genes" "ui_trait_very_slow_breeders" "ui_trait_extremely_slow_breeders" "ui_trait_extremely_rapid_breeders" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic positive pop_growth }
     modifier = {
@@ -161,7 +161,7 @@ ui_trait_very_slow_breeders = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_pyroclastic" "trait_rapid_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_psychological_infertility" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "trait_nascent_stage" "ui_trait_very_rapid_breeders" "ui_trait_extremely_rapid_breeders" "ui_trait_extremely_slow_breeders" }
+    opposites = { "trait_pyroclastic" "trait_slow_breeders" "trait_rapid_breeders" "trait_fertile" "trait_rapid_breeders_lithoid" "trait_plantoid_budding" "trait_lithoid_budding" "trait_vat_grown" "trait_tiyanki" "trait_humanoid_psychological_infertility" "trait_humanoid_existential_iteroparity" "trait_egg_laying" "trait_nascent_stage" "trait_incubator" "trait_pathogenic_genes" "ui_trait_very_rapid_breeders" "ui_trait_extremely_rapid_breeders" "ui_trait_extremely_slow_breeders" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative pop_growth }
     modifier = {
@@ -236,7 +236,7 @@ ui_trait_long_lived = {
     modifier = {
         leader_lifespan_add = 40
     }
-    opposites = { "trait_venerable" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic positive leader }
     slave_cost = {
@@ -255,7 +255,7 @@ ui_trait_momentary = {
     modifier = {
         leader_lifespan_add = -40
     }
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_very_long_lived" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative leader }
     ai_weight = {
@@ -277,7 +277,7 @@ ui_trait_short_lived = {
     modifier = {
         leader_lifespan_add = -20
     }
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_very_long_lived" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative leader }
     ai_weight = {
@@ -305,7 +305,7 @@ ui_trait_very_long_lived = {
     modifier = {
         leader_lifespan_add = 60
     }
-    opposites = { "trait_venerable" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_short_lived" "ui_trait_very_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic positive leader }
     slave_cost = {
@@ -324,7 +324,7 @@ ui_trait_very_short_lived = {
     modifier = {
         leader_lifespan_add = -30
     }
-    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_very_long_lived" }
+    opposites = { "trait_venerable" "trait_enduring" "trait_fleeting" "trait_fleeting_lithoid" "trait_syncretic_proles" "ui_trait_long_lived" "ui_trait_very_long_lived" "ui_trait_short_lived" "ui_trait_momentary" }
     allowed_archetypes = { BIOLOGICAL }
     tags = { organic negative leader }
     ai_weight = {
@@ -456,7 +456,7 @@ ui_trait_extremely_weak = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_strong" "trait_very_strong" "trait_tankbound" "trait_photoadaptive" "ui_trait_extremely_strong" "ui_trait_very_weak" }
+    opposites = { "trait_weak" "trait_strong" "trait_very_strong" "trait_tankbound" "trait_photoadaptive" "trait_hollow_bones" "ui_trait_extremely_strong" "ui_trait_very_weak" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic negative pop_output army }
     modifier = {
@@ -480,7 +480,7 @@ ui_trait_very_weak = {
     species_potential_add = {
         can_add_negative_organic_traits = yes
     }
-    opposites = { "trait_strong" "trait_very_strong" "trait_tankbound" "trait_photoadaptive" "ui_trait_extremely_strong" "ui_trait_extremely_weak" }
+    opposites = { "trait_weak" "trait_strong" "trait_very_strong" "trait_tankbound" "trait_photoadaptive" "trait_hollow_bones" "ui_trait_extremely_strong" "ui_trait_extremely_weak" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
     tags = { organic negative pop_output army }
     modifier = {

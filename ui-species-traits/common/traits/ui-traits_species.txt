@@ -17,7 +17,7 @@ ui_trait_urban = {
 # Name: Uneconomical
 ui_trait_uneconomical = {
     cost = -2
-    opposites = { "trait_thrifty" }
+    opposites = { "trait_ingenious" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -376,7 +376,7 @@ ui_trait_extremely_creative = {
 # Name: Uncreative
 ui_trait_uncreative = {
     cost = -2
-    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
+    opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_very_uncreative" "ui_trait_extremely_uncreative" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -389,7 +389,7 @@ ui_trait_uncreative = {
 # Name: Very Uncreative
 ui_trait_very_uncreative = {
     cost = -3
-    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_extremely_uncreative" }
+    opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_extremely_uncreative" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     
@@ -402,7 +402,7 @@ ui_trait_very_uncreative = {
 # Name: Extremely Uncreative
 ui_trait_extremely_uncreative = {
     cost = -5
-    opposites = { "trait_ingenious" "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" }
+    opposites = { "ui_trait_creative" "ui_trait_very_creative" "ui_trait_extremely_creative" "ui_trait_uncreative" "ui_trait_very_uncreative" }
     
     allowed_archetypes = { BIOLOGICAL LITHOID }
     

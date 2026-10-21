@@ -17,6 +17,7 @@ A Stellaris mod that adds 58 custom species traits, extends several trait famili
   - [Manual Installation](#manual-installation)
 - [Localisation](#localisation)
 - [Compatibility](#compatibility)
+- [Privacy and Data](#privacy-and-data)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Related Projects](#related-projects)
@@ -74,6 +75,14 @@ The repository includes English localisation for the principal traits and their 
 |-----------|--------------------|-------|
 | Stellaris | `4.4.*` | Declared by the bundled mod descriptors |
 | Operating systems | Any operating system supported by Stellaris | Development and testing are performed on Linux with native Stellaris and Steam Play |
+
+## 🛡️ Privacy and Data
+
+Universum Infinitum - Species Traits does not request, collect, transmit, or persist personal data.
+
+For the detailed description of how the application handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
+
+The mod contains local game definitions, localisation, and image assets. It has no built-in personal-data transfer; interactions with distribution platforms are separate from mod execution.
 
 ## 📚 Documentation
 

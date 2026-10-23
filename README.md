@@ -109,6 +109,10 @@ See the [contributing guidelines](./CONTRIBUTING.md) for details on how to repor
 
 See the [Code of Conduct](CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
 
+## 🔒 Security
+
+Universum Infinitum - Species Traits follows the [Security Policy](SECURITY.md) for vulnerability reporting and disclosure.
+
 ## 🔗 Related Projects
 
 Other projects in the Universum Infinitum collection include:

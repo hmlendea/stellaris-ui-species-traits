@@ -15,6 +15,7 @@ This document covers the guidelines and processes for contributing to this proje
 - [Code Style](#code-style)
 - [Documentation](#documentation)
 - [Code of Conduct](#-code-of-conduct)
+- [Security](#-security)
 - [License](#-license)
 
 ## 🤝 How to Contribute
@@ -84,6 +85,10 @@ Follow the project's coding standards:
 ## 📋 Code of Conduct
 
 This project follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 🔒 Security
+
+This project follows the [Security Policy](SECURITY.md).
 
 ## 📄 License
 

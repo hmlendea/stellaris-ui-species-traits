@@ -113,6 +113,10 @@ See the [Code of Conduct](CODE_OF_CONDUCT.md) for the standards of conduct expec
 
 Universum Infinitum - Species Traits follows the [Security Policy](SECURITY.md) for vulnerability reporting and disclosure.
 
+## 🏗️ Architecture
+
+Universum Infinitum - Species Traits follows a declarative data-driven plugin architecture for Stellaris. See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system context, principal components, runtime flows, ownership boundaries, dependencies, constraints, and extension points.
+
 ## 🔗 Related Projects
 
 Other projects in the Universum Infinitum collection include:

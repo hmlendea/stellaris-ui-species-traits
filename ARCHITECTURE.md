@@ -304,3 +304,12 @@ Integration location: All extensions are additive file placements within the exi
 | [SECURITY.md](./SECURITY.md) | Vulnerability reporting and disclosure policy |
 | [PRIVACY.md](./PRIVACY.md) | Data handling and privacy statement |
 | [Trait Catalogue (Wiki)](https://github.com/hmlendea/stellaris-ui-species-traits/wiki/Traits) | Detailed trait list with effects and costs |
+| [Documentation Index](./docs/INDEX.md) | Master navigation for all generated documentation |
+| [Repository Overview](./docs/repository-overview.md) | Purpose, scope, entry points, capabilities |
+| [Repository Structure](./docs/repository-structure.md) | Source tree layout, module organisation |
+| [Architecture (docs)](./docs/architecture.md) | Architectural areas, interfaces, contracts |
+| [Data Model](./docs/data-model.md) | Trait schema, scaling policy, archetype variables |
+| [Components](./docs/components/) | Trait definitions, archetype config, localisation, assets |
+| [Flows](./docs/flows/) | Mod load, species creation, trait selection |
+| [Behaviour](./docs/behaviour/) | Trait effects, scaling policy |
+| [Operational](./docs/operational/) | Build/deployment, configuration, dependencies, testing |

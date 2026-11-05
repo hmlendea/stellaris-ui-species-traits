@@ -81,6 +81,7 @@ Follow the project's coding standards:
 - Revise relevant docs for changes.
 - Follow the documentation style guide.
 - Preview changes locally if possible.
+- For structural or behavioural changes, update the corresponding documents in the [`docs/`](./docs/INDEX.md) directory (architecture, data model, components, flows, behaviour, operational).
 
 ## 📋 Code of Conduct
 

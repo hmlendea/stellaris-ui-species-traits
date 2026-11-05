@@ -86,11 +86,20 @@ The mod contains local game definitions, localisation, and image assets. It has 
 
 ## 📚 Documentation
 
-Detailed trait information is maintained in the project Wiki.
+Detailed trait information is maintained in the project Wiki. Comprehensive architectural and operational documentation is available in the `docs/` directory.
 
 | Resource | Description |
 |----------|-------------|
 | [Trait Catalogue](https://github.com/hmlendea/stellaris-ui-species-traits/wiki/Traits) | Lists the species traits included by the mod |
+| [Documentation Index](./docs/INDEX.md) | Master navigation for all generated documentation |
+| [Repository Overview](./docs/repository-overview.md) | Purpose, scope, entry points, capabilities |
+| [Repository Structure](./docs/repository-structure.md) | Source tree layout, module organisation |
+| [Architecture](./docs/architecture.md) | Architectural areas, interfaces, contracts |
+| [Data Model](./docs/data-model.md) | Trait schema, scaling policy, archetype variables |
+| [Components](./docs/components/) | Trait definitions, archetype config, localisation, assets |
+| [Flows](./docs/flows/) | Mod load, species creation, trait selection |
+| [Behaviour](./docs/behaviour/) | Trait effects, scaling policy |
+| [Operational](./docs/operational/) | Build/deployment, configuration, dependencies, testing |
 
 ## 🤝 Contributing
 

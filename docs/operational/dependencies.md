@@ -110,10 +110,10 @@ The mod works with the base game only. DLC content is not referenced.
 
 | Platform | Workflow | Status |
 |----------|----------|--------|
-| Steam Workshop | `.github/workflows/steam-workshop.yml` | Automated |
-| Nexus Mods | `.github/workflows/nexus-mods.yml` | Automated |
+| Steam Workshop | `.github/workflows/steam-workshop-release.yml` | Automated |
+| Nexus Mods | `.github/workflows/nexus-mods-release.yml` | Automated |
 | Paradox Mods | Manual upload | Manual |
-| GitHub Releases | Manual or via `gh release create` | Manual |
+| GitHub Releases | `.github/workflows/github-release.yml` | Automated on published release |
 
 ## Development dependencies
 

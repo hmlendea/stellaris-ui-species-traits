@@ -40,10 +40,10 @@ The repository hosts a Stellaris mod that adds 58 custom species traits, extends
 
 | Channel | Mechanism |
 |---------|-----------|
-| Steam Workshop | `steam-workshop.yml` release workflow |
-| Nexus Mods | `nexus-mods.yml` release workflow |
+| Steam Workshop | `steam-workshop-release.yml` release workflow |
+| Nexus Mods | `nexus-mods-release.yml` release workflow |
 | Paradox Mods | Manual upload |
-| GitHub Releases | Release archives consumed by the workflows |
+| GitHub Releases | `github-release.yml` release workflow, triggered by a published release |
 
 ## Version targeting
 

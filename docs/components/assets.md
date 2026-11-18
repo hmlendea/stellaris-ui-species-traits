@@ -1,42 +1,40 @@
-# Component: Assets (Icons)
+# Component: Assets (icons)
 
-This document details the trait icon pipeline, naming convention, format requirements, and source assets.
+This document details the trait icon convention, the directory contents, the format requirements, and the artwork workflow.
 
-## File location
+## Location and contents
 
 **Directory:** `ui-species-traits/gfx/interface/icons/traits/`
-**Count:** 58 `.dds` files
+**Files:** 60 `.dds` icons
+
+| Group | Count |
+|-------|-------|
+| Icons named after a `ui_trait_*` identifier | 58 |
+| Icons with a `trait_*` name | 2 (`trait_very_strong.dds`, `trait_venerable.dds`) |
+
+Every `ui_trait_*` identifier defined in `common/traits/` has a matching icon file, and no `ui_trait_*` icon lacks a definition. The two `trait_*` files do not correspond to any definition in this repository, so they are inert unless a vanilla definition resolves them.
 
 ## Naming convention
 
-The engine loads icons by filename convention, not by explicit `icon` field in trait definitions.
+The engine resolves icons by file name; no trait definition declares an `icon` field.
 
-| Trait ID pattern | Icon filename | Engine reference |
-|------------------|---------------|------------------|
+| Identifier pattern | Icon file | Engine reference |
+|--------------------|-----------|------------------|
 | `ui_trait_<name>` | `ui_trait_<name>.dds` | `GFX_trait_ui_trait_<name>` |
-| `trait_<name>` (vanilla) | `trait_<name>.dds` | `GFX_trait_trait_<name>` |
+| `trait_<name>` | `trait_<name>.dds` | `GFX_trait_trait_<name>` |
 
 ### Examples
 
-| Trait ID | Icon file | Engine reference |
-|----------|-----------|------------------|
+| Identifier | Icon file | Engine reference |
+|------------|-----------|------------------|
 | `ui_trait_agile` | `ui_trait_agile.dds` | `GFX_trait_ui_trait_agile` |
-| `ui_trait_very_strong` | `ui_trait_very_strong.dds` | `GFX_trait_ui_trait_very_strong` |
-| `ui_trait_extremely_agile` | `ui_trait_extremely_agile.dds` | `GFX_trait_ui_trait_extremely_agile` |
-| `trait_very_strong` (vanilla) | `trait_very_strong.dds` | `GFX_trait_trait_very_strong` |
+| `ui_trait_very_adaptive` | `ui_trait_very_adaptive.dds` | `GFX_trait_ui_trait_very_adaptive` |
+| `ui_trait_extremely_strong` | `ui_trait_extremely_strong.dds` | `GFX_trait_ui_trait_extremely_strong` |
+| `trait_venerable` | `trait_venerable.dds` | `GFX_trait_trait_venerable` |
 
-## Format requirements
+Because resolution is filename-based, renaming an icon silently changes or removes the displayed icon while leaving the trait definition valid.
 
-| Property | Requirement |
-|----------|-------------|
-| Format | DDS (DirectDraw Surface) |
-| Compression | BC3 / DXT5 (recommended) |
-| Resolution | 64×64 or 128×128 pixels |
-| Colour space | sRGB |
-| Alpha channel | Yes (for transparency) |
-| Mipmaps | Optional (Stellaris generates if missing) |
-
-## Directory structure
+## Directory pattern
 
 ```
 gfx/
@@ -52,163 +50,64 @@ gfx/
             ├── ui_trait_deceitful.dds
             ├── ui_trait_demanding.dds
             ├── ui_trait_dumb.dds
-            ├── ui_trait_extremely_agile.dds
-            ├── ui_trait_extremely_creative.dds
-            ├── ui_trait_extremely_demanding.dds
-            ├── ui_trait_extremely_gluttonous.dds
-            ├── ui_trait_extremely_light_eaters.dds
-            ├── ui_trait_extremely_nonadaptive.dds
-            ├── ui_trait_extremely_rapid_breeders.dds
-            ├── ui_trait_extremely_short_lived.dds
-            ├── ui_trait_extremely_sluggish.dds
-            ├── ui_trait_extremely_strong.dds
-            ├── ui_trait_extremely_uncreative.dds
-            ├── ui_trait_extremely_undemanding.dds
-            ├── ui_trait_extremely_weak.dds
-            ├── ui_trait_gluttonous.dds
-            ├── ui_trait_lazy.dds
-            ├── ui_trait_light_eaters.dds
-            ├── ui_trait_long_lived.dds
-            ├── ui_trait_momentary.dds
-            ├── ui_trait_nonresilient.dds
-            ├── ui_trait_optimistic.dds
-            ├── ui_trait_pessimistic.dds
-            ├── ui_trait_poor_engineers.dds
-            ├── ui_trait_poor_physicists.dds
-            ├── ui_trait_poor_sociologists.dds
-            ├── ui_trait_short_lived.dds
-            ├── ui_trait_sluggish.dds
-            ├── ui_trait_trusting.dds
-            ├── ui_trait_uncreative.dds
-            ├── ui_trait_undemanding.dds
-            ├── ui_trait_uneconomical.dds
-            ├── ui_trait_urban.dds
-            ├── ui_trait_very_adaptive.dds
-            ├── ui_trait_very_agile.dds
-            ├── ui_trait_very_creative.dds
-            ├── ui_trait_very_demanding.dds
-            ├── ui_trait_very_docile.dds
-            ├── ui_trait_very_gluttonous.dds
-            ├── ui_trait_very_light_eaters.dds
-            ├── ui_trait_very_long_lived.dds
-            ├── ui_trait_very_natural_engineers.dds
-            ├── ui_trait_very_natural_physicists.dds
-            ├── ui_trait_very_natural_sociologists.dds
-            ├── ui_trait_very_nonadaptive.dds
-            ├── ui_trait_very_poor_engineers.dds
-            ├── ui_trait_very_poor_physicists.dds
-            ├── ui_trait_very_poor_sociologists.dds
-            ├── ui_trait_very_rapid_breeders.dds
-            ├── ui_trait_very_repugnant.dds
-            ├── ui_trait_very_short_lived.dds
-            ├── ui_trait_very_slow_breeders.dds
-            ├── ui_trait_very_slow_learners.dds
-            ├── ui_trait_very_strong.dds
-            ├── ui_trait_very_thrifty.dds
-            ├── ui_trait_very_wasteful.dds
-            ├── ui_trait_very_weak.dds
-            └── ... (58 total)
+            └── ... (60 files total)
 ```
 
-No subdirectories; all icons directly in `traits/`.
+No subdirectories are used.
 
-## Source assets
+## Format requirements
+
+| Property | Requirement |
+|----------|-------------|
+| Container | DDS (DirectDraw Surface) |
+| Resolution | Match the vanilla trait icons so the grid remains uniform |
+| Alpha | Preserve if the artwork uses transparency |
+| File name | Must match the identifier exactly, including case |
+
+The repository records no compression setting or colour-space metadata, so confirm any new icon against an existing file in the same directory.
+
+## Source artwork
 
 **File:** `src/trait.xcf`
-**Format:** GIMP (`.xcf`) — layered source for icon creation
-**Purpose:** Master file for creating/editing trait icons before exporting to DDS
+**Format:** GIMP layered source
 
-### Workflow
+### Creating an icon
 
-1. Open `src/trait.xcf` in GIMP
-2. Create/edit layer for new trait icon
-3. Export as DDS: File → Export As → `ui_trait_<name>.dds`
-4. Place in `ui-species-traits/gfx/interface/icons/traits/`
-5. Verify in-game
+1. Open `src/trait.xcf` in GIMP.
+2. Duplicate the layer of the closest existing trait and adapt the artwork.
+3. Export as DDS with the file name `ui_trait_<identifier>.dds`.
+4. Place the file in `ui-species-traits/gfx/interface/icons/traits/`.
+5. Verify that the file name matches the identifier exactly.
+6. Verify the icon in game.
 
-## Completeness requirement
+### Updating an icon
 
-Every trait ID in `common/traits/*.txt` must have a matching `.dds` file in `gfx/interface/icons/traits/`.
+1. Modify the relevant layer in `src/trait.xcf`.
+2. Export the DDS again.
+3. Replace the existing file under `gfx/interface/icons/traits/`.
+4. Verify the icon in game.
 
-| Trait count | Icon files required | Status |
-|-------------|---------------------|--------|
-| 38 custom traits | 38 | ✅ Complete |
-| 20 vanilla-extended tiers | 20 | ✅ Complete |
-| **Total** | **58** | ✅ Complete |
+### Removing an icon
 
-Missing icons show a placeholder (generic question mark) in-game.
+1. Delete `ui_trait_<identifier>.dds`.
+2. Remove the corresponding layer from `src/trait.xcf` if it is no longer required.
 
-## Icon design guidelines
+## Completeness check
 
-### Visual style
+The current state is complete: 58 `ui_trait_*` icons for 58 identifiers. A missing icon renders a placeholder in the trait selector, and the engine logs no dedicated error for it, so verify visually after any icon change.
 
-- Consistent with Stellaris vanilla trait icons
-- Clean, recognisable at 64×64
-- Colour coding by trait category:
-  - **Physical/Combat:** Red/orange tones
-  - **Social:** Blue/purple tones
-  - **Biological:** Green/brown tones
-  - **Industry/Research:** Yellow/gold tones
-  - **Negative traits:** Desaturated, darker variants
-
-### Tier visual progression
-
-| Tier | Visual indicator |
-|------|------------------|
-| Base (vanilla) | Standard icon |
-| Very | Enhanced glow, additional elements, brighter |
-| Extremely | Maximum glow, complex elements, most saturated |
-
-Example: `ui_trait_strong` → `ui_trait_very_strong` → `ui_trait_extremely_strong` show progressive intensification.
-
-## Maintenance procedures
-
-### Adding an icon for a new trait
-
-1. Open `src/trait.xcf` in GIMP
-2. Duplicate an existing similar trait layer
-3. Modify artwork for new trait
-4. Export as DDS: `ui_trait_<new_id>.dds`
-5. Copy to `ui-species-traits/gfx/interface/icons/traits/`
-6. Verify filename matches trait ID exactly
-7. Test in-game
-
-### Updating an existing icon
-
-1. Open `src/trait.xcf` in GIMP
-2. Modify the relevant layer
-3. Re-export DDS
-4. Replace file in `gfx/interface/icons/traits/`
-5. Test in-game
-
-### Removing an icon (trait deleted)
-
-1. Delete `ui_trait_<id>.dds` from `gfx/interface/icons/traits/`
-2. Optionally remove layer from `src/trait.xcf`
-
-## DDS export settings (GIMP)
-
-Recommended export options:
-- **Compression:** BC3 / DXT5
-- **Generate mipmaps:** Yes
-- **sRGB colour space:** Yes
-- **Alpha channel:** Preserve
-
-## Verification checklist
-
-- [ ] All 58 trait IDs have matching `.dds` files
-- [ ] Filenames match trait IDs exactly (case-sensitive)
-- [ ] All files are valid DDS (open in GIMP or texture viewer)
-- [ ] Resolution is 64×64 or 128×128
-- [ ] No subdirectories in `traits/`
-- [ ] In-game: no placeholder icons in species creation trait picker
+Checklist:
+- [ ] Every `ui_trait_*` identifier has a matching `.dds` file.
+- [ ] File names match identifiers exactly.
+- [ ] All files open as valid DDS images.
+- [ ] No subdirectories exist under `traits/`.
+- [ ] No placeholder icons appear in game.
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
-| [Data model](./data-model.md) | Icon naming convention, completeness |
-| [Architecture](./architecture.md) | Asset area, interfaces |
-| [Components/trait-definitions.md](./trait-definitions.md) | Trait IDs requiring icons |
+| [Data model](../data-model.md) | Icon convention, completeness |
+| [Architecture](../architecture.md) | Asset area, interfaces |
+| [Components/trait-definitions.md](./trait-definitions.md) | Identifiers requiring icons |
 | [Components/localisation.md](./localisation.md) | Parallel naming convention |
-| Root [ARCHITECTURE.md](../ARCHITECTURE.md) | High-level asset area |

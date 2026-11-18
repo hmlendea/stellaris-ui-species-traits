@@ -1,157 +1,118 @@
 # Configuration
 
-This document describes the mod descriptor configuration, supported version declarations, and configuration variables.
+This document describes the mod descriptor configuration, the supported version declaration, and the shared archetype variables.
 
 ## Descriptor files
 
-| File | Location | Purpose |
-|------|----------|---------|
-| `ui-species-traits.mod` | Repository root | Mod descriptor for launcher |
-| `ui-species-traits/descriptor.mod` | Mod folder root | Mod descriptor for engine |
+| File | Location | Role |
+|------|----------|------|
+| `ui-species-traits.mod` | Repository root | Descriptor read by the launcher |
+| `ui-species-traits/descriptor.mod` | Mod directory root | Descriptor read by the engine |
 
-### Root descriptor (`ui-species-traits.mod`)
-
-```clausewitz
-version = "2.0.2"
-name = "Universum Infinitum - Species Traits"
-path = "mod/ui-species-traits"
-tags = { "Species" "Traits" "Gameplay" }
-supported_version = "v4.5.*"
-```
-
-### Mod folder descriptor (`ui-species-traits/descriptor.mod`)
+### Root descriptor
 
 ```clausewitz
-version = "2.0.2"
-name = "Universum Infinitum - Species Traits"
-path = "common/species_archetypes"
-tags = { "Species" "Traits" "Gameplay" }
-supported_version = "v4.5.*"
+version="2.0.2"
+name="Universum Infinitum - Species Traits"
+path="mod/ui-species-traits"
+tags={
+    "Species"
+}
+supported_version="v4.5.*"
 ```
 
-**Note:** The mod folder descriptor's `path` points to a subdirectory of the mod package (typically `common/`), not the mod root. This is standard Stellaris convention.
+### Mod directory descriptor
 
-## Field reference
+The mod directory descriptor declares the same five fields with the same values.
+
+### Field reference
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `version` | string | Yes | Mod release version, rewritten from the release tag by the release workflows |
-| `name` | string | Yes | Display name shown in launcher |
-| `path` | string | Yes | Relative path to mod content directory |
-| `tags` | list of strings | Yes | Categorisation tags for launcher filtering |
-| `supported_version` | string | Yes | Stellaris version branch this mod supports |
+| `version` | string | Yes | Release version, rewritten from the release tag by the release workflows |
+| `name` | string | Yes | Display name in the launcher and on distribution platforms |
+| `path` | string | Yes | Location of the mod directory relative to the Stellaris user directory |
+| `tags` | list | Yes | Launcher categories; the repository declares the single tag `Species` |
+| `supported_version` | string | Yes | Stellaris branch in which the mod is enabled |
 
-## Supported version declaration
+### Consistency rule
 
-### Current declaration
+Both descriptors must declare identical values. The release workflows rewrite `version` in both; a divergence leaves the launcher and the engine reporting different versions for the same package.
+
+## Supported version
+
+Both descriptors declare:
 
 ```clausewitz
-supported_version = "v4.5.*"
+supported_version="v4.5.*"
 ```
 
-This declares compatibility with Stellaris 4.5.x. The `*` wildcard allows patch updates within 4.5.x.
+The `*` wildcard accepts patch releases within the 4.5 branch.
 
-### Version mismatch handling
+| Game version | Launcher conduct |
+|--------------|------------------|
+| `4.5.*` | Mod enabled |
+| Earlier branches | Mod shown as incompatible |
+| Later branches | Mod shown as incompatible until `supported_version` is raised |
 
-| Scenario | Launcher behaviour |
-|----------|-------------------|
-| Game version ≥ 4.5.x | Mod enabled |
-| Game version < 4.5.x | Mod shows as incompatible |
-| Game version > 4.6.x | Mod disabled with warning |
+### Raising the supported version
 
-### Version update procedure
+1. Change `supported_version` in both descriptors to the new branch, for example `v4.6.*`.
+2. Revalidate every vanilla identifier referenced in `opposites`.
+3. Verify that every modifier key still exists in the new engine version.
+4. Verify the mod in game.
+5. Tag and release, then update the compatibility sections of the root documents and this documentation set.
 
-When Stellaris releases a new major version:
+## Archetype variables
 
-1. Update `supported_version` in both descriptors to new version (e.g., `v4.6.*`)
-2. Verify trait definitions still valid in new engine version
-3. Test in-game for any breaking changes
-4. Update README if version badge changes
-5. Tag and release
-
-## Tags
-
-| Tag | Meaning |
-|-----|---------|
-| `Species` | Categorises as species-related content |
-| `Traits` | Categorises as trait definitions |
-| `Gameplay` | Categorises as gameplay modifiers |
-
-Tags are used by the launcher for filtering. Multiple tags allowed.
-
-## Configuration variables
-
-The mod uses Clausewitz script variables in `00_species_archetypes.txt` for archetype configuration. These are **not** mod-level configuration — they are archetype definitions consumed by the engine.
-
-### Variable reference
+The mod's only other configurable values are the Clausewitz variables in `common/species_archetypes/00_species_archetypes.txt`. They are archetype definitions consumed by the engine rather than runtime settings.
 
 ```clausewitz
-@species_trait_points = 2
-@species_max_traits = 7
 @robot_trait_points = 0
 @robot_max_traits = 6
 @machine_trait_points = 1
 @machine_max_traits = 7
+@species_trait_points = 2
+@species_max_traits = 7
 ```
 
-### Variable modification procedure
+### Modification procedure
 
-1. Open `ui-species-traits/common/species_archetypes/00_species_archetypes.txt`
-2. Modify variable values at top
-3. All archetypes referencing those variables update automatically
-4. Test in-game species creation
+1. Open `ui-species-traits/common/species_archetypes/00_species_archetypes.txt`.
+2. Change a variable value.
+3. Every archetype referencing that variable follows; `LITHOID` follows through its inheritance.
+4. Verify the effective limits in species creation.
+
+## Trait-level configuration
+
+Trait values are not settings; they are content. Each entry's `cost`, `opposites`, `allowed_archetypes`, and `modifier` block define its behaviour, as documented in [components/trait-definitions.md](../components/trait-definitions.md).
 
 ## Localisation configuration
 
-### File encoding
-
 | Property | Requirement |
 |----------|-------------|
-| Encoding | UTF-8 with BOM |
-| Language key | `l_english:` |
+| Encoding | UTF-8 |
+| Root key | `l_english` |
+| Byte-order mark | present in the additional-tiers file, absent in the trait-definitions file |
 
-Stellaris requires BOM for YAML localisation files. Without it, the file is ignored and raw IDs displayed.
-
-### Adding languages
-
-To add a language:
-
-1. Create `localisation/<locale>/` directory
-2. Create `<mod>_l_<locale>.yml` file
-3. Use root key `l_<locale>:` (lowercase locale code)
-4. Translate all keys
-5. Save as UTF-8 with BOM
+Preserve each file's existing byte-order-mark state when editing.
 
 ## Icon configuration
 
-### Naming convention
+Icons carry no configuration. The engine resolves them from the file name, and no trait definition declares an `icon` field; see [components/assets.md](../components/assets.md).
 
-Icons loaded by filename convention:
+## Pre-release checklist
 
-| Trait ID | Icon file | Engine reference |
-|----------|-----------|------------------|
-| `ui_trait_<name>` | `ui_trait_<name>.dds` | `GFX_trait_ui_trait_<name>` |
-| `trait_<name>` | `trait_<name>.dds` | `GFX_trait_trait_<name>` |
-
-### No explicit icon field
-
-Trait definitions do **not** contain an `icon` field. Icons are referenced by the engine via the `GFX_trait_<id>` convention based on filename. This differs from some vanilla traits that use explicit `icon = "GFX_trait_..."` references.
-
-## Descriptor validation checklist
-
-Before releasing:
-
-- [ ] Both descriptors have identical `name`, `tags`, `supported_version`
-- [ ] `supported_version` matches current Stellaris version branch
-- [ ] `path` in mod folder descriptor points to existing subdirectory
-- [ ] No trailing whitespace or formatting issues in descriptor
-- [ ] `supported_version` format is correct (`v<major>.<minor>*`)
+- [ ] Both descriptors declare identical `version`, `name`, `path`, `tags`, and `supported_version`.
+- [ ] `supported_version` matches the targeted game branch.
+- [ ] `path` points to an existing mod directory.
+- [ ] No trailing whitespace or stray characters in either descriptor.
+- [ ] Every trait identifier has a name key, a description key, and an icon.
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
 | [Build and deployment](./build-and-deployment.md) | Release workflows, packaging |
-| [Dependencies](./dependencies.md) | Stellaris version coupling |
+| [Dependencies](./dependencies.md) | Engine version coupling |
 | [Architecture](../architecture.md) | Descriptor area |
-| [Components/archetype-config.md](../components/archetype-config.md) | Archetype variable definitions |

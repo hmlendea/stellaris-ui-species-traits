@@ -1,225 +1,170 @@
 # Behaviour: Trait effects
 
-This document describes how trait modifiers are applied in-game, their scope, stacking rules, and interaction with game systems.
+This document describes how trait modifiers are applied in game, their scope, stacking, and relevant interactions.
 
-## Modifier application model
+## Application model
 
-All trait effects are **static modifiers** defined in the `modifier` block of each trait. The Stellaris engine applies these continuously while the species exists in-game.
+Every trait effect is a **static modifier** declared in the `modifier` block. The engine applies these for as long as the species exists.
 
 ```clausewitz
 modifier = {
-    army_damage_mult = 0.1
-    ship_evasion_mult = 0.05
+    army_morale = 0.15
+    army_damage_mult = 0.15
 }
 ```
 
-### Application scope
+### Scope
 
-| Scope | Target | Example modifiers |
-|-------|--------|-------------------|
-| **Species** | All pops of this species | `leader_lifespan_mult`, `pop_growth_speed_mult` |
-| **Pop** | Individual pops | `pop_food_upkeep_mult`, `pop_jobs_produces_mult` |
-| **Planet** | Planet where pops reside | `planet_jobs_minerals_produces_mult`, `planet_jobs_food_produces_mult` |
-| **Army** | Armies recruited from species | `army_damage_mult`, `army_morale_mult` |
-| **Ship** | Ships crewed by species | `ship_evasion_mult`, `ship_fire_rate_mult` |
-| **Country** | Empire-wide | `research_speed_mult`, `trade_value_mult`, `monthly_unity_mult` |
+The modifier key determines the scope; the trait itself declares no scope.
 
-### Application timing
+| Modifier family | Scope | Examples in this mod |
+|-----------------|-------|----------------------|
+| `army_*` | Armies recruited from the species | `army_damage_mult`, `army_morale`, `army_defense_damage_mult` |
+| `weapon_type_*_fire_rate_mult` | Ships crewed by the species | kinetic, energy, and explosive fire rate |
+| `planet_jobs_*` | Jobs on planets holding the pops | `planet_jobs_energy_produces_mult`, `planet_jobs_unity_produces_mult` |
+| `planet_pops_*` | Organic pops on the planet | `planet_pops_organics_food_upkeep_mult` |
+| `planet_amenities_mult` | Planet amenities | `planet_amenities_mult` |
+| `pop_*` | Individual pops | `pop_happiness`, `pop_environment_tolerance`, `pop_housing_usage_mult` |
+| `country_*` | The empire | `country_influence_produces_mult` |
+| `leader_*`, `leaders_*` | Leaders | `leader_lifespan_add`, `leaders_upkeep_mult` |
+| `logistic_growth_mult` | Population growth | `logistic_growth_mult` |
+| `species_empire_size_mult` | Empire size contribution | `species_empire_size_mult` |
+| `bureaucrat_jobs_bonus_workforce_mult` | Bureaucrat workforce | `bureaucrat_jobs_bonus_workforce_mult` |
+| `negative_leader_traits_species` | Leader trait pool | `negative_leader_traits_species` |
 
-- **Game start:** Modifiers applied when species is initialised
-- **Pop growth:** New pops inherit species modifiers immediately
-- **Gene modification:** Modifiers updated on species template change
-- **Save/load:** Modifiers reapplied from current trait definitions
+### Timing
 
-## Modifier categories
+- Modifiers are applied when the species is created.
+- New pops inherit their species modifiers immediately.
+- Genetic modification recalculates the modifier set from the new trait list.
+- On load, modifier values come from the current trait definitions rather than from the save.
 
-### Combat modifiers
+## Multiplicative and additive modifiers
 
-| Modifier | Scope | Effect |
-|----------|-------|--------|
-| `army_damage_mult` | Army | Multiplies army damage output |
-| `army_morale_mult` | Army | Multiplies army morale (health) |
-| `ship_evasion_mult` | Ship | Adds to ship evasion chance |
-| `ship_fire_rate_mult` | Ship | Multiplies weapon fire rate |
-| `ship_weapon_damage_mult` | Ship | Multiplies weapon damage |
+| Modifier | Kind | Effect |
+|----------|------|--------|
+| `army_damage_mult` | Multiplicative | Scales army damage |
+| `army_morale` | Multiplicative | Scales army morale |
+| `army_defense_damage_mult` | Multiplicative | Scales defensive army damage |
+| `planet_jobs_energy_produces_mult` | Multiplicative | Scales energy job production |
+| `planet_jobs_minerals_produces_mult` | Multiplicative | Scales mineral job production |
+| `planet_jobs_food_produces_mult` | Multiplicative | Scales food job production |
+| `planet_jobs_unity_produces_mult` | Multiplicative | Scales unity job production |
+| `planet_jobs_*_research_produces_mult` | Multiplicative | Scales research job production per field |
+| `planet_pops_organics_food_upkeep_mult` | Multiplicative | Scales organic food upkeep |
+| `planet_amenities_mult` | Multiplicative | Scales amenities |
+| `pop_amenities_usage_mult` | Multiplicative | Scales amenities usage |
+| `pop_housing_usage_mult` | Multiplicative | Scales housing usage |
+| `pop_happiness` | Additive | Adjusts happiness |
+| `pop_environment_tolerance` | Additive | Adjusts habitability |
+| `country_influence_produces_mult` | Multiplicative | Scales influence production |
+| `logistic_growth_mult` | Multiplicative | Scales population growth |
+| `species_empire_size_mult` | Multiplicative | Scales empire size contribution |
+| `bureaucrat_jobs_bonus_workforce_mult` | Multiplicative | Scales bureaucrat workforce bonus |
+| `leaders_upkeep_mult` | Multiplicative | Scales leader upkeep |
+| `negative_leader_traits_species` | Additive | Subtracts from the negative leader trait pool |
+| `weapon_type_*_weapon_fire_rate_mult` | Multiplicative | Scales weapon fire rate per weapon class |
 
-### Economic modifiers
+`planet_pops_consumer_goods_upkeep_mult` appears in the housing and consumer goods family, but the repository records no scope note for it beyond its use on planet pops.
 
-| Modifier | Scope | Effect |
-|----------|-------|--------|
-| `pop_jobs_produces_mult` | Pop | Multiplies all job output |
-| `pop_jobs_energy_produces_mult` | Pop/Planet | Multiplies energy job output |
-| `pop_jobs_minerals_produces_mult` | Pop/Planet | Multiplies minerals job output |
-| `pop_jobs_food_produces_mult` | Pop/Planet | Multiplies food job output |
-| `pop_jobs_consumer_goods_produces_mult` | Pop/Planet | Multiplies consumer goods output |
-| `pop_jobs_unity_produces_mult` | Pop/Planet | Multiplies unity job output |
-| `pop_jobs_research_produces_mult` | Pop/Planet | Multiplies research job output |
-| `trade_value_mult` | Country | Multiplies trade value from pops |
-| `monthly_unity_mult` | Country | Multiplies monthly unity income |
+## Stacking
 
-### Research modifiers
+| Source combination | Stacking |
+|--------------------|----------|
+| Two traits with the same modifier | Additive sum |
+| Trait and tradition | Additive sum |
+| Trait and ascension perk | Additive sum |
+| Trait and technology | Additive sum |
+| Trait and event or planet modifier | Additive sum |
 
-| Modifier | Scope | Effect |
-|----------|-------|--------|
-| `research_speed_mult` | Country | Multiplies all research speed |
-| `research_speed_engineering_mult` | Country | Multiplies engineering research |
-| `research_speed_physics_mult` | Country | Multiplies physics research |
-| `research_speed_society_mult` | Country | Multiplies society research |
+A species cannot hold the same trait twice, and `opposites` prevents holding two traits from one family, so duplication through the mod's own entries is not possible.
 
-### Population modifiers
-
-| Modifier | Scope | Effect |
-|----------|-------|--------|
-| `pop_growth_speed_mult` | Species/Planet | Multiplies pop growth speed |
-| `pop_food_upkeep_mult` | Pop | Multiplies food consumption |
-| `pop_consumer_goods_upkeep_mult` | Pop | Multiplies consumer goods consumption |
-| `pop_housing_usage_mult` | Pop | Multiplies housing usage |
-| `pop_amenities_usage_mult` | Pop | Multiplies amenities usage |
-| `pop_environment_tolerance` | Pop | Adds to habitability (0–100%) |
-
-### Leader modifiers
-
-| Modifier | Scope | Effect |
-|----------|-------|--------|
-| `leader_lifespan_mult` | Species | Multiplies leader lifespan |
-| `leader_experience_gain_mult` | Country | Multiplies leader XP gain |
-| `leader_skill_levels` | Country | Adds to leader level cap |
-
-## Stacking rules
-
-### Same modifier, same source
-
-- **Not possible:** A species cannot have the same trait twice
-- Traits are mutually exclusive via `opposites`
-
-### Same modifier, different sources
-
-| Source combination | Stacking behaviour |
-|--------------------|-------------------|
-| Trait + Trait (different) | **Additive** — values sum |
-| Trait + Tradition | **Additive** |
-| Trait + Ascension perk | **Additive** |
-| Trait + Technology | **Additive** |
-| Trait + Event modifier | **Additive** |
-| Trait + Planet modifier | **Additive** |
-
-### Example: Army damage stacking
+### Example
 
 ```
-Species traits:
-- trait_strong: army_damage_mult = 0.2
-- ui_trait_brave: army_damage_mult = 0.15
-
-Tradition: Supremacy → army_damage_mult = 0.2
-Technology: Gene Warriors → army_damage_mult = 0.1
-
-Total army_damage_mult = 0.2 + 0.15 + 0.2 + 0.1 = 0.65 (65% bonus)
+Vanilla trait_strong        army_damage_mult = 0.2
+ui_trait_extremely_strong   army_damage_mult = 0.48
+Supremacy tradition         army_damage_mult = 0.2
 ```
 
-### Multiplicative vs additive
+Note that `trait_strong` and `ui_trait_extremely_strong` are mutually exclusive through `opposites`, so the sum above cannot arise from those two traits; the example illustrates additive combination only.
 
-- **Additive:** Most `*_mult` modifiers (sum of percentages)
-- **Multiplicative:** Some base values (e.g., `pop_growth_speed` base × (1 + sum))
+## Family detail
 
-The engine handles this internally; trait definitions use additive values.
+### Combat and army
 
-## Trait-specific behaviour details
+| Identifier | Modifiers |
+|------------|-----------|
+| `ui_trait_brave` | `army_morale = 0.15`, `army_damage_mult = 0.15` |
+| `ui_trait_craven` | `army_morale = -0.15`, `army_damage_mult = -0.15` |
+| `ui_trait_nonresilient` | `army_defense_damage_mult = -0.5` |
+| `ui_trait_agile` family | three weapon fire-rate modifiers, positive for agile and negative for sluggish |
+| `ui_trait_very_weak`, `ui_trait_extremely_weak`, `ui_trait_extremely_strong` | army damage plus worker and soldier workforce modifiers |
 
-### Positive traits (cost > 0)
+### Economy and upkeep
 
-Provide bonuses to one or more modifiers. Examples:
+| Identifier | Modifiers |
+|------------|-----------|
+| `ui_trait_demanding` family | amenities usage, consumer goods upkeep, housing usage |
+| `ui_trait_undemanding` family | the same three modifiers with the opposite sign |
+| `ui_trait_gluttonous` family | organic food upkeep, increased upkeep |
+| `ui_trait_light_eaters` family | organic food upkeep, reduced upkeep |
+| `ui_trait_urban` | food job production penalty |
+| `ui_trait_uneconomical` | energy job production penalty |
+| `ui_trait_lazy` | mineral job production penalty |
 
-| Trait | Key modifiers | Gameplay impact |
-|-------|---------------|-----------------|
-| `ui_trait_very_strong` | `army_damage_mult = 0.3`, `planet_jobs_minerals_produces_mult = 0.15` | Stronger armies, more minerals |
-| `ui_trait_very_intelligent` | `research_speed_mult = 0.18` | Faster research |
-| `ui_trait_very_rapid_breeders` | `pop_growth_speed_mult = 0.3` | Faster population growth |
-| `ui_trait_very_adaptive` | `pop_environment_tolerance = 0.3` | +30% habitability on all planets |
+### Research, unity, and amenities
 
-### Negative traits (cost < 0)
+| Identifier | Modifiers |
+|------------|-----------|
+| `ui_trait_dumb` | a `-0.1` penalty to each research field |
+| `ui_trait_poor_engineers`, `ui_trait_poor_physicists`, `ui_trait_poor_sociologists` | a `-0.15` penalty to one research field each |
+| `ui_trait_creative` family | unity production and amenities |
+| `ui_trait_uncreative` family | the same two modifiers with the opposite sign |
 
-Provide penalties but grant trait points. Examples:
+### Habitability, growth, and lifespan
 
-| Trait | Key modifiers | Gameplay impact |
-|-------|---------------|-----------------|
-| `ui_trait_very_weak` | `army_damage_mult = -0.3`, `planet_jobs_minerals_produces_mult = -0.15` | Weaker armies, fewer minerals |
-| `ui_trait_very_slow_learners` | `research_speed_mult = -0.18` | Slower research |
-| `ui_trait_very_slow_breeders` | `pop_growth_speed_mult = -0.3` | Slower population growth |
-| `ui_trait_very_nonadaptive` | `pop_environment_tolerance = -0.3` | -30% habitability |
+| Identifier | Modifiers |
+|------------|-----------|
+| `ui_trait_very_adaptive`, `ui_trait_very_nonadaptive`, `ui_trait_extremely_nonadaptive` | `pop_environment_tolerance` |
+| `ui_trait_very_rapid_breeders`, `ui_trait_extremely_rapid_breeders`, `ui_trait_very_slow_breeders`, `ui_trait_extremely_slow_breeders` | `logistic_growth_mult` |
+| `ui_trait_long_lived`, `ui_trait_very_long_lived`, `ui_trait_momentary`, `ui_trait_short_lived`, `ui_trait_very_short_lived` | `leader_lifespan_add` |
 
-### Special traits
+### Empire and governance
 
-| Trait | Unique behaviour |
-|-------|------------------|
-| `ui_trait_urban` | `pop_housing_usage_mult = -0.1` — reduces housing needs |
-| `ui_trait_uneconomical` | `pop_jobs_energy_produces_mult = -0.1` — reduces energy output |
-| `ui_trait_lazy` | `pop_jobs_produces_mult = -0.05` — reduces all job output |
-| `ui_trait_momentary` | `leader_lifespan_mult = -0.1` — shorter leader lives |
-| `ui_trait_nonresilient` | `pop_environment_tolerance = -0.1` — lower habitability |
+| Identifier | Modifiers |
+|------------|-----------|
+| `ui_trait_very_docile`, `ui_trait_very_unruly` | `species_empire_size_mult` |
+| `ui_trait_very_traditional`, `ui_trait_very_quarrelsome` | `bureaucrat_jobs_bonus_workforce_mult` |
+| `ui_trait_very_talented` | `negative_leader_traits_species`, `leaders_upkeep_mult` |
 
 ## Interaction with game systems
 
-### Species rights
+| System | Interaction |
+|--------|-------------|
+| Species rights | Trait modifiers apply under every species right |
+| Slave market | `slave_cost` on the additional tiers defines the trade value exchanged |
+| Genetic modification | Eligibility blocks decide which traits may be added or removed |
+| Robot assembly | `assembly_score` on two Strength tiers conditions assembly weight on planet designation |
+| Crossbreeding | `ui-traits_species.txt` declares `potential_crossbreeding_chance` on three entries |
+| Events | Scripted modifiers stack additively with trait modifiers |
 
-| Right | Trait effect interaction |
-|-------|-------------------------|
-| Full Citizenship | All trait modifiers apply |
-| Residence | All trait modifiers apply |
-| Slaves | `slave_cost` used instead of `cost`; modifiers still apply |
-| Purge | Modifiers apply until pop removed |
-| Assimilation | Species traits replaced; modifiers change |
+## Performance
 
-### Robot/Drone species
+Static modifiers impose no per-tick computation after the initial application; the engine aggregates them per species, planet, army, and country. The 58 trait definitions are negligible in number relative to vanilla content.
 
-- Machine archetype traits only affect robot pops
-- `ui_trait_very_natural_engineers` etc. apply to machine pop job output
-- No biological modifiers (food, consumer goods) apply
+## Verification
 
-### Hybrid species (gene clinics)
-
-- Primary species traits determine modifiers
-- Sub-species can have different trait selections
-- Each sub-species gets its own modifier set
-
-### Crisis/Event modifiers
-
-- Temporary modifiers from events stack additively with trait modifiers
-- Example: "Genetic Resequencing" event + `ui_trait_very_strong` = combined bonus
-
-## Performance considerations
-
-- Static modifiers have **zero runtime cost** after initial application
-- Engine caches modifier totals per species/planet/army
-- No per-tick computation for trait modifiers
-- Large trait counts (58) have no performance impact vs vanilla
-
-## Verification in-game
-
-### Console commands
-
-```bash
-# View species modifiers
-> species_modifiers <species_id>
-
-# View pop modifiers
-> pop_modifiers <pop_id>
-
-# View planet modifiers
-> planet_modifiers <planet_id>
-
-# View country modifiers
-> country_modifiers
-```
-
-### Debug tooltip
-
-Hover over resource output in planet view → shows modifier breakdown including trait contributions.
+1. Create a species with a known trait and record the effective value.
+2. Hover a resource in the planet view to inspect the modifier breakdown.
+3. Use the in-game console modifier commands to compare species, pop, planet, and country totals against the trait definitions.
+4. Change one modifier value in the file, restart, and confirm that an existing save reflects the new value.
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
-| [Components/trait-definitions.md](../components/trait-definitions.md) | Trait modifier values |
+| [Components/trait-definitions.md](../components/trait-definitions.md) | Modifier values per trait |
 | [Data model](../data-model.md) | Scaling policy for tier modifiers |
 | [Flows/trait-selection.md](../flows/trait-selection.md) | Selection constraints |
 | [Architecture](../architecture.md) | Data architecture |

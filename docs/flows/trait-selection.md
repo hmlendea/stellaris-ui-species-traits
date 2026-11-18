@@ -1,207 +1,161 @@
 # Flow: Trait selection
 
-This document details the trait selection logic, validation, and AI behaviour during species creation and empire generation.
+This document details trait selection logic, validation, and persistence during species creation and empire generation.
 
 ## Selection contexts
 
 | Context | Actor | Trait pool | Constraints |
 |---------|-------|------------|-------------|
-| Player empire creation | Human | All traits for archetype | Points, count, opposites |
-| AI empire generation | AI | All traits for archetype | Points, count, opposites, `ai_weight` |
-| Robot assembly | Player/AI | Machine/ROBOT traits | Points, count, opposites |
-| Gene modification | Player | Current species traits + available | Points, count, opposites |
-| Event/Anomaly rewards | Script | Specific trait IDs | Script-defined |
+| Player empire creation | Player | Traits allowed for the archetype | Points, count, opposites |
+| AI empire generation | AI | Traits allowed for the archetype | Points, count, opposites, `ai_weight` |
+| Robot assembly | Player or AI | Traits allowed for `MACHINE` or `ROBOT` | Points, count, opposites |
+| Genetic modification | Player | Current traits plus eligible additions | Points, count, opposites, eligibility blocks |
+| Scripted assignment | Event or anomaly script | Named identifiers | Script-defined |
 
-## Player selection algorithm
+## Player selection
 
 ### Budget tracking
 
 ```
 available_points = archetype.trait_points
-selected_traits = []
-selected_count = 0
+selected = []
+count = 0
 
-on_trait_select(trait):
-    if selected_count >= archetype.max_traits:
-        return REJECT "Max traits reached"
-    if available_points - trait.cost < 0:
-        return REJECT "Insufficient trait points"
-    if any(t in selected_traits for t in trait.opposites):
-        return REJECT "Conflicts with selected trait"
+on_select(trait):
+    if count >= archetype.max_traits: refuse("maximum traits reached")
+    if available_points - trait.cost < 0: refuse("insufficient trait points")
+    if any(selected.opposites contains trait): refuse("conflicts with selection")
 
-    selected_traits.add(trait)
-    selected_count += 1
+    selected.append(trait)
+    count += 1
     available_points -= trait.cost
-    disable_traits(trait.opposites)
-    return ACCEPT
+    disable(trait.opposites)
+    accept()
 
-on_trait_deselect(trait):
-    selected_traits.remove(trait)
-    selected_count -= 1
+on_deselect(trait):
+    selected.remove(trait)
+    count -= 1
     available_points += trait.cost
-    enable_traits(trait.opposites)  # if no other selected trait opposes them
+    enable(trait.opposites)
 ```
 
-### UI feedback
+Selection offers affordability feedback, and every trait disabled by an `opposites` entry becomes unselectable until the opposing trait is removed.
 
-- **Green highlight:** Affordable, no conflicts
-- **Red highlight:** Exceeds points or conflicts
-- **Grayed out:** Opposite of selected trait
-- **Tooltip on hover:** Shows cost, modifiers, conflicts
+## AI selection
 
-## AI selection algorithm
+The AI uses `ai_weight` where a trait declares it. Ten entries in `ui-traits_species_newtiers.txt` declare a weight block, and the negative tiers mostly declare `weight = 0`, so the AI avoids them deliberately. The 38 entries in `ui-traits_species.txt` declare no weight, leaving the engine's default.
 
-AI uses `ai_weight` as primary selection heuristic, modified by archetype and empire focus.
-
-### Weight calculation
+### Selection outline
 
 ```
-effective_weight = trait.ai_weight * archetype_modifier * focus_modifier * random_factor
-```
-
-| Factor | Values |
-|--------|--------|
-| `archetype_modifier` | BIOLOGICAL/LITHOID: 1.0, MACHINE: 0.8, ROBOT: 0.5 |
-| `focus_modifier` | Militarist: +military traits, Materialist: +research traits, etc. |
-| `random_factor` | 0.8–1.2 (prevents deterministic picks) |
-
-### Selection loop (simplified)
-
-```
-available = filter_traits_by_archetype(all_traits, archetype)
-available = sort_by_effective_weight(available)
+candidates = traits allowed for the archetype
 budget = archetype.trait_points
 count = 0
 
-for trait in available:
-    if count >= archetype.max_traits: break
+for trait in candidates by weight:
+    if count >= archetype.max_traits: stop
     if budget - trait.cost < 0: continue
-    if conflicts_with_selected(trait, selected): continue
-    if random() > selection_probability(trait): continue
+    if conflicts(trait, selected): continue
 
-    selected.add(trait)
+    select(trait)
     budget -= trait.cost
     count += 1
-    disable_opposites(trait.opposites)
+    disable(trait.opposites)
 ```
 
-### AI preferences by archetype
+Because the mod traits are limited to `BIOLOGICAL` and `LITHOID`, AI machine and robot empires never select them, and AI biological empires can reach at most the same point budget as the player.
 
-| Archetype | Preferred traits | Avoided traits |
-|-----------|------------------|----------------|
-| BIOLOGICAL | `ui_trait_very_strong`, `ui_trait_very_intelligent`, `ui_trait_very_rapid_breeders` | High-cost negatives unless needed for points |
-| LITHOID | Same as BIOLOGICAL + `ui_trait_very_adaptive` | — |
-| MACHINE | `ui_trait_very_natural_engineers`, `ui_trait_very_natural_physicists` | Positive physical/social (not allowed) |
-| ROBOT | Negative industry traits (grant points) | Positive traits (0 budget) |
+## Opposites
 
-## Opposites resolution
+### Structure of the exclusion
 
-### Mutual exclusion graph
+- **Symmetry:** the files declare both directions for paired traits, such as `ui_trait_brave` and `ui_trait_craven`.
+- **Family completeness:** a tier entry lists every senior and junior member of its family, including the vanilla members, so a species is unable to hold two tiers of one family.
+- **Cross-family references:** an entry may oppose vanilla traits that occupy an overlapping role, such as `ui_trait_dumb` opposing `trait_intelligent`, `trait_nerve_stapled`, and `trait_erudite`.
 
-Traits form a conflict graph via `opposites`. Key properties:
+### Conflict handling
 
-- **Symmetric:** If A opposes B, B opposes A (enforced by mod author)
-- **Transitive within families:** Base ↔ Very ↔ Extremely all mutually oppose
-- **Cross-family:** Some traits oppose across categories (e.g., `ui_trait_brave` ↔ `ui_trait_craven`)
+1. Player selection disables the opposing traits immediately.
+2. AI selection skips a candidate that conflicts with an existing choice.
+3. Scripted assignment removes conflicting traits first.
 
-### Conflict resolution order
-
-1. Player selection: Immediate — opposite traits disabled instantly
-2. AI selection: Check before adding — skip if conflicts
-3. Script assignment: Force — removes conflicting traits first
-
-### Tier family conflicts
-
-Each vanilla-extended family forms a complete mutual exclusion clique:
-
-```
-trait_strong ↔ trait_weak
-trait_strong ↔ ui_trait_very_strong
-trait_strong ↔ ui_trait_extremely_strong
-trait_weak ↔ ui_trait_very_weak
-trait_weak ↔ ui_trait_extremely_weak
-ui_trait_very_strong ↔ ui_trait_very_weak
-ui_trait_very_strong ↔ ui_trait_extremely_strong
-ui_trait_very_strong ↔ ui_trait_extremely_weak
-... (all pairs)
-```
-
-Player/AI can select **at most one** trait from each family.
-
-## Gene modification flow
-
-When player uses gene clinics to modify species:
-
-1. Current traits = baseline
-2. Available traits = all for archetype minus current opposites
-3. Budget = current trait points spent (can go negative temporarily)
-4. Player adds/removes traits
-5. On confirm: validate final state (points ≤ archetype limit, count ≤ max_traits)
-6. Cost: Unity + Time based on changes
-
-### Mod-specific considerations
-
-- Custom traits can be added/removed like vanilla traits
-- Tier traits: switching from base → Very costs trait point difference
-- `opposites` enforced during modification
-- Species template updates; all pops of that species update
-
-## Event/script trait assignment
-
-Some events/anomalies grant traits via script:
+### Example family exclusion
 
 ```clausewitz
-# Example event effect
+ui_trait_extremely_nonadaptive = {
+    cost = -4
+    opposites = { "trait_nonadaptive" "trait_adaptive" "trait_extremely_adaptive"
+                  "trait_robust" "trait_adaptive_lithoid" "trait_shelled"
+                  "trait_permeable_skin" "trait_genetic_memory"
+                  "trait_pathogenic_genes" "ui_trait_very_adaptive"
+                  "ui_trait_very_nonadaptive" }
+}
+```
+
+## Genetic modification
+
+When the player modifies a species through genetic engineering:
+
+1. The current traits form the baseline.
+2. The available additions are the archetype's traits minus those excluded by `opposites`.
+3. The budget is the trait point budget of the archetype.
+4. Eligibility blocks decide which traits may be added, removed, or dropped during merging:
+   - `species_possible_add` (9 entries) gates acquisition of a beneficial trait, for example `can_add_genetic_traits = yes`.
+   - `species_possible_remove` (9 entries) gates removal, for example `can_remove_beneficial_genetic_traits = yes`.
+   - `species_possible_merge_remove` (9 entries) gates loss during species merging, mostly `always = yes`.
+   - `species_potential_add` (11 entries) gates whether the trait is offered at all, for example `can_add_negative_organic_traits = yes`.
+5. The final state is validated against the point budget, the maximum count, and `opposites`.
+
+### Mod-specific conduct
+
+- Mod traits can be added and removed like vanilla traits, subject to the eligibility blocks above.
+- Moving between tiers of a family costs the difference in trait points.
+- A species template change propagates to every pop of that species.
+
+## Scripted assignment
+
+Events and anomalies may grant a trait by identifier:
+
+```clausewitz
 add_trait = ui_trait_very_strong
 ```
 
-Behaviour:
-- Ignores trait points and max_traits limits
-- Removes opposites automatically
-- Can exceed normal limits (temporary or permanent)
-- Mod traits work identically to vanilla traits in scripts
+Scripted assignment bypasses the point budget and the maximum count, and it removes conflicting opposites. The mod traits behave like vanilla traits here; no mod-side registration is required.
 
-## Save game persistence
+## Save-game persistence
 
-Selected traits stored in save game as trait ID list:
+Selected identifiers are stored with the species in the save game:
 
 ```clausewitz
 species = {
     traits = { trait_strong ui_trait_agile ui_trait_rapid_breeders }
-    ...
 }
 ```
 
-On load:
-- Engine reads trait IDs
-- Looks up each ID in current mod+vanilla registry
-- Missing IDs (mod disabled/updated): trait lost, warning logged
-- Modifiers applied from current trait definitions (not saved values)
+On load the engine resolves each identifier against the current trait registry:
 
-## Multiplayer synchronisation
+- An identifier that no longer exists is lost.
+- Modifier values are read from the current definitions rather than from the save, so a rebalance applies to existing saves.
 
-- Trait selections synced via empire design at game start
-- All players must have same mod version enabled
-- Mod checksum verified in lobby
-- Mismatch → cannot join / desync
+## Multiplayer
 
-## Testing scenarios
+Trait selections travel with the empire design, and every participant must run the same mod version. A version mismatch prevents joining or causes a desynchronisation, because the mod's descriptor and file contents contribute to the game checksum.
+
+## Verification scenarios
 
 | Scenario | Expected result |
 |----------|-----------------|
-| Player picks 8 traits (max 7) | 8th rejected |
-| Player picks trait costing 3 with 2 points | Rejected |
-| Player picks `ui_trait_agile` then `ui_trait_sluggish` | Second rejected, first stays |
-| AI Machine empire gets `ui_trait_very_natural_engineers` | Only if budget allows (cost 6 > 1 point → never) |
-| Gene mod: remove negative, add positive | Points recalculated, validated on confirm |
-| Event grants `ui_trait_extremely_strong` | Added, opposites removed, may exceed limits |
-| Load save with mod disabled | Traits missing, species weakened |
+| Eighth trait selected with a limit of seven | Selection refused |
+| Trait costing 3 selected with 2 points | Selection refused |
+| `ui_trait_agile` followed by `ui_trait_sluggish` | Second refused; first retained |
+| AI machine empire offered a mod trait | Never offered, because of `allowed_archetypes` |
+| Script grants `ui_trait_extremely_strong` | Applied, conflicting traits removed, limits may be exceeded |
+| Save loaded without the mod | Mod traits lost |
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
-| [Species creation flow](./species-creation.md) | UI flow, archetype determination |
-| [Components/trait-definitions.md](../components/trait-definitions.md) | Trait fields: cost, opposites, ai_weight |
+| [Species creation flow](./species-creation.md) | Interface flow, archetype determination |
+| [Components/trait-definitions.md](../components/trait-definitions.md) | Costs, opposites, eligibility blocks |
 | [Components/archetype-config.md](../components/archetype-config.md) | Archetype limits |
-| [Data model](../data-model.md) | Scaling policy, trait catalogue |

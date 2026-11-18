@@ -4,217 +4,145 @@ This document describes the release process, packaging, and distribution workflo
 
 ## Release model
 
-The mod uses **tag-based releases** via GitHub Actions. No build step is required — the mod is a pure data package.
+Releases are **tag-driven** and run through GitHub Actions. No build step exists, because the mod is a content package.
 
-### Version scheme
+### Versioning
 
-- **Format:** `v<major>.<minor>.<patch>` (e.g., `v1.2.3`)
-- **Tags:** Git tags prefixed with `v` trigger release workflows
-- **Supported version:** Declared in `descriptor.mod` as `supported_version = "v4.5.*"`
+- Tags follow `v<major>.<minor>.<patch>`.
+- The release workflows strip the leading `v` and write the remainder into `version` in both descriptors.
+- Both descriptors currently declare `version="2.0.2"` and `supported_version="v4.5.*"`.
 
 ## Packaging
 
-### Package structure
-
-The release asset is a ZIP archive containing:
+### Archive layout
 
 ```
 ui-species-traits_<version>.zip
-├── ui-species-traits/           # Mod folder (extracted to Stellaris mod directory)
+├── ui-species-traits/
 │   ├── descriptor.mod
 │   ├── common/
-│   │   ├── species_archetypes/
-│   │   │   └── 00_species_archetypes.txt
+│   │   ├── species_archetypes/00_species_archetypes.txt
 │   │   └── traits/
 │   │       ├── ui-traits_species.txt
 │   │       └── ui-traits_species_newtiers.txt
-│   ├── gfx/
-│   │   └── interface/
-│   │       └── icons/
-│   │           └── traits/
-│   │               └── *.dds (58 files)
-│   └── localisation/
-│       └── english/
-│           ├── ui-species-traits_l_english.yml
-│           └── ui-species-traits_newtiers_l_english.yml
-└── ui-species-traits.mod        # Descriptor at archive root (for launcher)
+│   ├── gfx/interface/icons/traits/*.dds
+│   └── localisation/english/*.yml
+└── ui-species-traits.mod
 ```
 
-### Package creation (manual)
+### Manual packaging
 
 ```bash
-# From repository root
-cd /path/to/stellaris-ui-species-traits
-
-# Set the version being packaged
-VERSION="1.2.3"
-
-# Create ZIP with the same layout as the automated workflow
+VERSION="2.0.2"
 zip -r "ui-species-traits_${VERSION}.zip" "ui-species-traits/" "ui-species-traits.mod"
 ```
 
-### Package creation (automated via GitHub Actions)
-
-The release workflows package the checked-out tag themselves:
-1. Update `version` in `ui-species-traits.mod` and `ui-species-traits/descriptor.mod`
-2. Build `ui-species-traits_<version>.zip` containing `ui-species-traits/` and `ui-species-traits.mod`
-3. Publish to GitHub Releases, Steam Workshop, and Nexus Mods
-
-## GitHub Actions workflows
+## Workflows
 
 ### GitHub Release (`.github/workflows/github-release.yml`)
 
-**Trigger:** Published GitHub release
+**Trigger:** publication of a GitHub release.
 
 **Steps:**
-1. Check out the released tag
-2. Extract the version from the release tag
-3. Update the `version` field in both mod descriptors
-4. Build the `ui-species-traits_<version>.zip` archive
-5. Attach the archive to the GitHub release via `softprops/action-gh-release@v2`
+1. Check out the repository.
+2. Read the release tag and strip the leading `v`.
+3. Write the version into `ui-species-traits.mod` and `ui-species-traits/descriptor.mod`.
+4. Build the release archive.
+5. Attach the archive to the published release.
 
-**Required secrets:**
-- `GITHUB_TOKEN` (provided automatically)
-
-### Steam Workshop (`.github/workflows/steam-workshop-release.yml`)
-
-**Trigger:** Push tag `v*.*.*` or `workflow_dispatch` with tag input
-
-**Steps:**
-1. Check out the requested tag
-2. Update the `version` field in both mod descriptors
-3. Build and extract the release archive
-4. Upload to Steam Workshop via `hmlendea/steam-workshop-update@latest`
-
-**Required secrets:**
-- `STEAM_USERNAME`
-- `STEAM_PASSWORD`
-- `STEAM_2FA_SEED`
-
-**Configuration (in workflow):**
-- `appid`: Steam App ID for Stellaris (281990)
-- `itemid`: Workshop item ID (2047811098)
-- `path`: `release/ui-species-traits/`
-- `changenote`: Links to GitHub release
+**Permissions:** `contents: write`.
 
 ### Nexus Mods (`.github/workflows/nexus-mods-release.yml`)
 
-**Trigger:** Push tag `v*.*.*` or `workflow_dispatch` with tag input
+**Trigger:** push of a `v*.*.*` tag, or a manual dispatch with a tag input.
 
 **Steps:**
-1. Check out the requested tag
-2. Update the `version` field in both mod descriptors
-3. Build the release archive
-4. Upload to Nexus Mods via `Nexus-Mods/upload-action@v1.0.0-beta.11`
+1. Check out the requested tag.
+2. Write the version into both descriptors.
+3. Build the release archive.
+4. Upload the archive to Nexus Mods.
 
-**Required secrets:**
-- `NEXUSMODS_API_KEY`
+**Secrets required:** `NEXUSMODS_API_KEY`.
 
-**Configuration (in workflow):**
-- `file_id`: Nexus Mods file ID (923479)
-- `filename`: `release.zip`
-- `display_name`: `ui-species-traits.zip`
-- `version`: Tag version
-- `description`: Changelog link
-- `category`: `main`
-- `archive_existing_version`: `true`
-- `update_mod_version`: `true`
+### Steam Workshop (`.github/workflows/steam-workshop-release.yml`)
+
+**Trigger:** push of a `v*.*.*` tag, or a manual dispatch with a tag input.
+
+**Steps:**
+1. Check out the requested tag.
+2. Write the version into both descriptors.
+3. Build the release archive.
+4. Upload the archive to the Steam Workshop item.
+
+**Secrets required:** `STEAM_USERNAME`, `STEAM_PASSWORD`, and `STEAM_2FA_SEED`.
+
+Do not print, commit, or transmit these values. Configure them as repository secrets only.
 
 ## Release procedure
 
-### 1. Prepare release
+### 1. Prepare
 
 ```bash
-# Ensure all changes committed
 git status
-
-# Update version references if needed
-# - descriptor.mod supported_version (if Stellaris version changed)
-# - README.md version badge
-# - CHANGELOG.md (if exists)
-
-# Run manual verification
-# 1. Create package locally
-# 2. Install in Stellaris
-# 3. Verify all traits work
 ```
 
-### 2. Create GitHub release
+Confirm that the descriptors, the localisation, and the icons are consistent, and verify the mod in game before tagging.
+
+### 2. Tag and publish
 
 ```bash
-# Tag the release
-git tag -a v1.2.3 -m "Release v1.2.3: <summary>"
-
-# Push tag (triggers the Steam Workshop and Nexus Mods workflows)
-git push origin v1.2.3
-
-# Publish the GitHub release (triggers the GitHub Release workflow,
-# which builds and attaches ui-species-traits_1.2.3.zip)
-gh release create v1.2.3 --title "v1.2.3" --notes "Release notes..."
+git tag -a v2.0.3 -m "Release v2.0.3"
+git push origin v2.0.3
+gh release create v2.0.3 --title "v2.0.3" --notes "Release notes"
 ```
 
-### 3. Verify deployment
+Pushing the tag starts the Nexus Mods and Steam Workshop workflows; publishing the release starts the GitHub Release workflow.
 
-- **GitHub Actions:** Check workflow runs for github-release, steam-workshop-release, and nexus-mods-release
-- **Steam Workshop:** Verify mod page shows new version
-- **Nexus Mods:** Verify mod page shows new version
-- **Paradox Mods:** Manual upload required (no workflow)
+### 3. Verify
 
-## Manual distribution
+- Confirm that all three workflow runs completed.
+- Confirm that the GitHub release carries the archive asset.
+- Confirm that the Nexus Mods and Steam Workshop pages show the new version.
+- Install the released archive and confirm that the mod loads and that the traits appear.
 
-### Paradox Mods
+## Paradox Mods
 
-No automated workflow. Manual steps:
+Paradox Mods receives no automated publication. Upload the released archive manually and set the version, changelog, and supported game version on the platform.
 
-1. Go to https://mods.paradoxplaza.com/
-2. Log in, navigate to mod page
-3. Upload new version ZIP
-4. Set version, changelog, supported game version
+## Rollback
 
-### Direct download
+If a release proves faulty:
 
-Users can download ZIP from GitHub Releases page and install manually:
+1. Publish a corrected release rather than deleting a tag, so that the platform versions stay monotonic.
+2. Republish the previous version through `workflow_dispatch` with the earlier tag for Steam Workshop and Nexus Mods.
+3. Replace the archive on Paradox Mods manually.
 
-1. Download `ui-species-traits_<version>.zip`
-2. Extract to `Documents/Paradox Interactive/Stellaris/mod/`
-3. Enable in launcher
+Deleting a tag requires explicit maintainer approval, because it breaks the provenance of an already published archive.
 
-## Rollback procedure
+## Compatibility
 
-If a release has critical issues:
+| Mod version series | Stellaris version | Notes |
+|--------------------|-------------------|-------|
+| 2.x | `4.5.*` | Current declaration in both descriptors |
+| 1.x | 3.2 and earlier | Superseded |
 
-1. **GitHub Releases:** Delete the release and tag
-   ```bash
-   git tag -d v1.2.3
-   git push origin :refs/tags/v1.2.3
-   gh release delete v1.2.3
-   ```
-2. **Steam Workshop:** Re-upload previous version via workflow_dispatch with old tag
-3. **Nexus Mods:** Re-upload previous version via workflow_dispatch with old tag
-4. **Paradox Mods:** Re-upload previous version manually
-
-## Version compatibility
-
-| Mod version | Stellaris version | Notes |
-|-------------|-------------------|-------|
-| 1.x.x | 4.4.* / 4.5.* | Current supported range |
-| Future | 4.6.* | Update `supported_version` in descriptors |
+A new Stellaris branch requires a descriptor update and revalidation of every vanilla identifier referenced in `opposites`.
 
 ## Troubleshooting
 
-| Issue | Cause | Resolution |
-|-------|-------|------------|
-| Steam upload fails | Invalid credentials | Check `STEAM_USERNAME`, `STEAM_PASSWORD`, `STEAM_2FA_SEED` secrets |
-| Nexus upload fails | Invalid API key | Check `NEXUSMODS_API_KEY` secret |
-| Release asset not found | Asset name mismatch | Ensure the archive label matches the mod directory name `ui-species-traits` |
-| Mod not loading | `supported_version` mismatch | Update descriptor to match current Stellaris version |
-| Icons missing | DDS files not in package | Verify `gfx/interface/icons/traits/` included in ZIP |
+| Symptom | Probable cause | Resolution |
+|---------|----------------|------------|
+| Steam upload fails | Missing or invalid credentials | Verify the three Steam secrets |
+| Nexus upload fails | Missing or invalid API key | Verify `NEXUSMODS_API_KEY` |
+| Release asset missing | The archive step failed before the upload | Inspect the workflow log |
+| Mod not listed | `supported_version` mismatch | Update the descriptors for the current branch |
+| Icons missing in game | DDS files absent from the archive | Verify that `gfx/interface/icons/traits/` is packaged |
+| Traits show raw identifiers | Localisation files absent or malformed | Verify that both `.yml` files are packaged and parse |
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
-| [Configuration](./configuration.md) | Descriptor variables, supported_version |
-| [Dependencies](./dependencies.md) | Stellaris engine version coupling |
+| [Configuration](./configuration.md) | Descriptor fields and values |
+| [Dependencies](./dependencies.md) | Engine version coupling |
 | [Architecture](../architecture.md) | Deployment model |
-| Root [README.md](../README.md) | Installation instructions |

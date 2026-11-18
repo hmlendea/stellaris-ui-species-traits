@@ -12,6 +12,7 @@ This document describes the mod descriptor configuration, supported version decl
 ### Root descriptor (`ui-species-traits.mod`)
 
 ```clausewitz
+version = "2.0.2"
 name = "Universum Infinitum - Species Traits"
 path = "mod/ui-species-traits"
 tags = { "Species" "Traits" "Gameplay" }
@@ -21,6 +22,7 @@ supported_version = "v4.5.*"
 ### Mod folder descriptor (`ui-species-traits/descriptor.mod`)
 
 ```clausewitz
+version = "2.0.2"
 name = "Universum Infinitum - Species Traits"
 path = "common/species_archetypes"
 tags = { "Species" "Traits" "Gameplay" }
@@ -33,6 +35,7 @@ supported_version = "v4.5.*"
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
+| `version` | string | Yes | Mod release version, rewritten from the release tag by the release workflows |
 | `name` | string | Yes | Display name shown in launcher |
 | `path` | string | Yes | Relative path to mod content directory |
 | `tags` | list of strings | Yes | Categorisation tags for launcher filtering |

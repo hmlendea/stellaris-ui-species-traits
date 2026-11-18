@@ -111,12 +111,14 @@ docs/
 
 | Version | Date | Changes |
 |---------|------|---------|
-| v1.0.0 | Initial release | First release with all 58 traits |
-| v1.1.0 | Later | Bug fixes, balance adjustments |
-| v1.2.0 | Later | New trait additions, icon updates |
-| v1.2.3 | Current | Latest release |
+| v1.0 | 2020-04-04 | First release |
+| v1.1 | 2020-04-07 | Additional traits |
+| v1.1.1 – v1.1.5 | 2020-04-22 – 2021-12-14 | Incremental fixes, artwork, and Stellaris 3.2 support |
+| v2.0.0 | 2026-08-14 | Tier scaling and opposites rework; automated release workflows |
+| v2.0.1 | 2026-10-24 | Updated for Stellaris 4.5 |
+| v2.0.2 | 2026-11-18 | English localisation revision: British spelling, Latin-ancestry wording, and spelling and grammar corrections |
 
-*Note: Specific version dates are not tracked in this documentation. Check GitHub Releases for exact dates.*
+*Note: Per-release notes are maintained on GitHub Releases; this table records only release identity.*
 
 ## Contact
 

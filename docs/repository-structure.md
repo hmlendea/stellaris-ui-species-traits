@@ -7,70 +7,80 @@ This document describes the source tree layout and module organisation of the Un
 ```
 stellaris-ui-species-traits/
 ├── .github/
+│   ├── FUNDING.yml                    # Funding configuration
+│   ├── cover.png                      # Repository cover image
 │   └── workflows/
 │       ├── github-release.yml         # GitHub Release workflow
 │       ├── nexus-mods-release.yml     # Nexus Mods release workflow
 │       └── steam-workshop-release.yml # Steam Workshop release workflow
 ├── src/
-│   └── trait.xcf               # GIMP source file for trait icons
-├── ui-species-traits/          # Mod package root (extracted to Stellaris mod directory)
-│   ├── descriptor.mod          # Mod descriptor for launcher (inside mod folder)
+│   └── trait.xcf                      # GIMP source file for trait icons
+├── ui-species-traits/                 # Mod package root (installed into the Stellaris mod directory)
+│   ├── descriptor.mod                 # Mod descriptor read by the engine
 │   ├── common/
 │   │   ├── species_archetypes/
 │   │   │   └── 00_species_archetypes.txt   # Archetype trait limits
 │   │   └── traits/
-│   │       ├── ui-traits_species.txt       # 38 custom traits
-│   │       └── ui-traits_species_newtiers.txt  # 20 vanilla-family tier extensions
+│   │       ├── ui-traits_species.txt       # 38 trait definitions
+│   │       └── ui-traits_species_newtiers.txt  # 20 additional tiers
 │   ├── gfx/
 │   │   └── interface/
 │   │       └── icons/
-│   │           └── traits/                 # 58 DDS icon files
+│   │           └── traits/                 # 60 DDS icon files
 │   └── localisation/
 │       └── english/
-│           ├── ui-species-traits_l_english.yml       # Localisation for custom traits
-│           └── ui-species-traits_newtiers_l_english.yml  # Localisation for tier extensions
-├── ui-species-traits.mod       # Mod descriptor for launcher (repository root)
-├── ARCHITECTURE.md             # Root architecture documentation
+│           ├── ui-species-traits_l_english.yml       # Localisation for trait definitions
+│           └── ui-species-traits_newtiers_l_english.yml  # Localisation for additional tiers
+├── ui-species-traits.mod              # Mod descriptor read by the launcher (repository root)
+├── ARCHITECTURE.md                    # Root architecture documentation
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── PRIVACY.md
 ├── README.md
-├── ROADMAP.md
 ├── SECURITY.md
-└── docs/                       # Generated documentation (this directory)
+└── docs/                              # Detailed documentation (this directory)
 ```
 
 ## Module organisation
 
 | Directory | Purpose | File types |
 |-----------|---------|------------|
-| `ui-species-traits/common/species_archetypes/` | Archetype configuration | Clausewitz script (`.txt`) |
+| `ui-species-traits/common/species_archetypes/` | Archetype trait limits | Clausewitz script (`.txt`) |
 | `ui-species-traits/common/traits/` | Trait definitions | Clausewitz script (`.txt`) |
 | `ui-species-traits/localisation/english/` | English localisation | YAML (`.yml`) |
 | `ui-species-traits/gfx/interface/icons/traits/` | Trait icons | DDS (`.dds`) |
-| `src/` | Icon source assets | GIMP (`.xcf`) |
-| `.github/workflows/` | CI/CD release automation | YAML (`.yml`) |
+| `src/` | Icon source artwork | GIMP (`.xcf`) |
+| `.github/workflows/` | Release automation | YAML (`.yml`) |
 
 ## Key files
 
 | File | Role |
 |------|------|
-| `ui-species-traits.mod` / `ui-species-traits/descriptor.mod` | Mod registration; declares `version`, `name`, `path`, `tags`, `supported_version` |
-| `common/species_archetypes/00_species_archetypes.txt` | Defines trait points and max traits per archetype via variables |
-| `common/traits/ui-traits_species.txt` | 38 custom trait definitions with cost, category, opposites, modifiers |
-| `common/traits/ui-traits_species_newtiers.txt` | 20 Very/Extremely tier extensions for vanilla trait families |
-| `localisation/english/ui-species-traits_l_english.yml` | English names/descriptions for custom traits |
-| `localisation/english/ui-species-traits_newtiers_l_english.yml` | English names/descriptions for tier extensions |
-| `gfx/interface/icons/traits/*.dds` | 58 icons loaded by filename convention (`GFX_trait_<id>`) |
+| `ui-species-traits.mod` / `ui-species-traits/descriptor.mod` | Mod registration; declares `version`, `name`, `path`, `tags`, and `supported_version` |
+| `common/species_archetypes/00_species_archetypes.txt` | Defines trait points and maximum traits per archetype through shared variables |
+| `common/traits/ui-traits_species.txt` | 38 trait definitions with cost, opposites, allowed archetypes, and modifiers |
+| `common/traits/ui-traits_species_newtiers.txt` | 20 additional Very and Extremely tiers for vanilla trait families |
+| `localisation/english/ui-species-traits_l_english.yml` | English names and descriptions for the trait definitions |
+| `localisation/english/ui-species-traits_newtiers_l_english.yml` | English names and descriptions for the additional tiers |
+| `gfx/interface/icons/traits/*.dds` | 60 icons resolved by filename convention |
 
 ## Naming conventions
 
-- Trait IDs: `ui_trait_<name>` for custom traits; `ui_trait_very_<name>` / `ui_trait_extremely_<name>` for tier extensions
-- Localisation keys: `ui_trait_<name>:0` (name), `ui_trait_<name>_desc:0` (description)
-- Icon filenames: `ui_trait_<name>.dds` or `trait_<name>.dds` matching the `GFX_trait_<name>` reference
-- File encoding: UTF-8 with BOM for `.yml` (Stellaris requirement)
+- Trait identifiers: `ui_trait_<name>` for trait definitions; `ui_trait_very_<name>` and `ui_trait_extremely_<name>` for additional tiers
+- Localisation keys: `ui_trait_<name>:0` for the name and `ui_trait_<name>_desc:0` for the description
+- Icon filenames: `ui_trait_<name>.dds` or `trait_<name>.dds`, corresponding to the `GFX_trait_<name>` reference resolved by the engine
+- File encoding: the additional-tiers localisation file carries a UTF-8 byte-order mark; see [components/localisation.md](./components/localisation.md)
 
 ## Distribution
 
-The mod is distributed as a ZIP archive containing the `ui-species-traits/` directory and `ui-species-traits.mod` at the root. Release workflows download the GitHub release asset and push to Steam Workshop and Nexus Mods.
+The release workflows write the released version into both descriptors, package the mod directory and the root descriptor into a ZIP archive, and publish it to GitHub Releases, Nexus Mods, and the Steam Workshop. Paradox Mods remains a manual upload; see [operational/build-and-deployment.md](./operational/build-and-deployment.md).
+
+## Related documents
+
+| Document | Scope |
+|----------|-------|
+| [Repository overview](./repository-overview.md) | Purpose, scope, entry points |
+| [Architecture](./architecture.md) | Architectural areas, interfaces, contracts |
+| [Configuration](./operational/configuration.md) | Descriptor fields and values |
+| Root [ARCHITECTURE.md](../ARCHITECTURE.md) | High-level architectural boundaries |

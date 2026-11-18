@@ -1,216 +1,156 @@
 # Flow: Species creation
 
-This document describes the species creation flow from UI interaction to trait selection and validation.
+This document describes the species creation flow from interface interaction to trait selection and validation.
 
 ## Overview
 
 ```mermaid
 flowchart TD
-    A[Player opens Empire Creation] --> B[Select Species Portrait]
-    B --> C[Engine determines Archetype]
-    C --> D[Load Trait Pool for Archetype]
-    D --> E[Display Trait Picker UI]
-    E --> F[Player selects traits]
-    F --> G{Validation}
-    G -->|Pass| H[Species Created]
-    G -->|Fail| I[Show Error / Prevent Confirm]
-    H --> J[Save to Empire Design]
+    A[Player opens empire creation] --> B[Select species portrait]
+    B --> C[Engine determines the archetype]
+    C --> D[Read trait points and maximum traits]
+    D --> E[Filter traits by allowed archetypes]
+    E --> F[Display the trait selector]
+    F --> G[Player selects traits]
+    G --> H{Points, count, and opposites valid?}
+    H -->|Yes| I[Species created]
+    H -->|No| J[Selection refused]
+    I --> K[Selection stored with the empire design]
 ```
 
 ## Step-by-step
 
 ### 1. Archetype determination
 
-| Portrait type | Archetype | Trait points | Max traits |
-|---------------|-----------|--------------|------------|
-| Biological (humanoid, mammalian, etc.) | BIOLOGICAL | 2 | 7 |
-| Lithoid (rock) | LITHOID | 2 | 7 |
-| Machine (synthetic) | MACHINE | 1 | 7 |
-| Robot (constructed) | ROBOT | 0 | 6 |
-| Hovering | HOVERING | 1 | 7 |
-| Psionic | PSIONIC | 2 | 7 |
+| Portrait or empire type | Archetype | Trait points | Maximum traits |
+|-------------------------|-----------|--------------|----------------|
+| Biological | `BIOLOGICAL` | 2 | 7 |
+| Lithoid | `LITHOID` | 2 (inherited) | 7 (inherited) |
+| Machine | `MACHINE` | 1 | 7 |
+| Robot | `ROBOT` | 0 | 6 |
+| Presapient | `PRESAPIENT` | 2 | 7 |
+| Other | `OTHER` | not declared | not declared |
 
-Archetype is determined by the species portrait category, not player choice.
+The archetype follows from the portrait and empire type rather than from a player choice, and the engine also supports vanilla archetypes that this file does not configure.
 
-### 2. Trait pool filtering
+### 2. Trait filtering
 
-Engine filters all registered traits (vanilla + mod) by `allowed_archetypes`:
+The engine retains only traits whose `allowed_archetypes` contains the current archetype:
 
 ```clausewitz
-# Example trait definition
-ui_trait_agile = {
+ui_trait_brave = {
+    cost = 2
+    opposites = { "ui_trait_craven" }
     allowed_archetypes = { BIOLOGICAL LITHOID }
-    ...
+    modifier = {
+        army_morale = 0.15
+        army_damage_mult = 0.15
+    }
 }
 ```
 
-Only traits where `allowed_archetypes` contains the current archetype are shown.
+Because every mod trait declares `BIOLOGICAL` alone or `BIOLOGICAL` and `LITHOID`, the mod traits available per archetype are:
 
-**Mod trait availability by archetype:**
+| Archetype | Mod traits offered |
+|-----------|--------------------|
+| `BIOLOGICAL` | all 58 |
+| `LITHOID` | all 58 |
+| `PRESAPIENT` | all 58 |
+| `MACHINE` | none |
+| `ROBOT` | none |
+| `OTHER` | none |
 
-| Archetype | Available mod traits |
-|-----------|---------------------|
-| BIOLOGICAL | All 58 (38 custom + 20 tiers) |
-| LITHOID | All 58 (38 custom + 20 tiers) |
-| MACHINE | Industry traits only (~12) |
-| ROBOT | Industry traits only (~12) |
-| HOVERING | Industry traits only (~12) |
-| PSIONIC | All 58 (inherits BIOLOGICAL) |
+Machine and robot species still receive the raised trait points and maximum trait counts, but must spend them on vanilla traits. Presapient species declare `uses_modifiers = no`, so trait modifiers may not apply to them.
 
-### 3. Trait picker UI
+### 3. Trait selector
 
-Traits displayed grouped by `category`:
+The selector displays each trait with its icon, localised name, cost, and description.
 
-| Category | UI Group | Example traits |
-|----------|----------|----------------|
-| `physical` | Physical | `ui_trait_strong`, `ui_trait_agile`, `ui_trait_very_strong` |
-| `social` | Social | `ui_trait_creative`, `ui_trait_charismatic`, `ui_trait_trusting` |
-| `biological` | Biological | `ui_trait_rapid_breeders`, `ui_trait_long_lived`, `ui_trait_adaptive` |
-| `industry` | Industry | `ui_trait_natural_engineers`, `ui_trait_thrifty`, `ui_trait_very_natural_physicists` |
-| `military` | Military | `ui_trait_brave`, `ui_trait_craven` |
-| `leader` | Leader | (rarely used) |
-
-Each trait shows:
-- Icon (`GFX_trait_<id>`)
-- Name (from localisation `ui_trait_<id>:0`)
-- Cost (trait points)
-- Description (from localisation `ui_trait_<id>_desc:0`, shown on hover)
+Traits appear grouped by the vanilla category they are assigned to: traits from `ui-traits_species.txt` declare no `category`, so the engine assigns them to a default group, whereas the additional tiers declare `category = normal`.
 
 ### 4. Selection mechanics
 
 #### Trait point budget
 
-- Starting budget = archetype `trait_points` (2 for Biological, 1 for Machine, 0 for Robot)
-- Positive traits cost points (e.g., `cost = 2`)
-- Negative traits grant points (e.g., `cost = -2`)
-- Running total must not exceed budget
+- The starting budget is the archetype's trait points: 2 for `BIOLOGICAL`, `PRESAPIENT`, and `LITHOID`; 1 for `MACHINE`; 0 for `ROBOT`.
+- A positive cost consumes points; a negative cost grants them.
+- The running total is unable to fall below zero.
 
-#### Max trait count
+#### Maximum trait count
 
-- Hard limit = archetype `max_traits` (7 for Biological/Machine, 6 for Robot)
-- Counts all selected traits (positive + negative)
+- The limit is the archetype's maximum traits: 7 for `BIOLOGICAL`, `PRESAPIENT`, `LITHOID`, and `MACHINE`; 6 for `ROBOT`.
+- The count includes both positive and negative traits.
 
-#### Opposites enforcement
+#### Mutual exclusion
 
-When player selects a trait, all traits in its `opposites` list are disabled:
+Selecting a trait disables every identifier listed in its `opposites`, for example:
 
 ```clausewitz
-ui_trait_agile = {
-    opposites = { trait_clumsy ui_trait_sluggish ui_trait_very_sluggish ui_trait_extremely_sluggish }
+ui_trait_craven = {
+    cost = -2
+    opposites = { "ui_trait_brave" }
+    allowed_archetypes = { BIOLOGICAL LITHOID }
+    modifier = {
+        army_morale = -0.15
+        army_damage_mult = -0.15
+    }
 }
 ```
 
-Selecting `ui_trait_agile` grays out `trait_clumsy`, `ui_trait_sluggish`, etc.
+Within a tier family the exclusion covers every member, so a species can hold at most one tier of a family. Because the lists are authored per entry, symmetry depends on the content rather than on the engine.
 
-#### Tier mutual exclusion
+### 5. Validation
 
-Vanilla-extended tiers include all family members in `opposites`:
+| Rule | Evaluation point | Result on failure |
+|------|------------------|-------------------|
+| Count within the maximum | Every selection | Selection refused |
+| Point total not negative | Every selection | Selection refused |
+| No opposed trait selected | Every selection | Conflicting trait disabled or selection refused |
 
-```clausewitz
-ui_trait_very_strong = {
-    opposites = { trait_weak trait_very_weak ui_trait_weak ui_trait_very_weak ui_trait_extremely_weak }
-}
-```
+### 6. Confirmation
 
-Player can only pick one tier per family (base, Very, or Extremely).
+On confirmation the engine stores the selected identifiers with the empire design. The traits continue to function only while the mod remains installed and active, and a later identifier change breaks an existing design's reference.
 
-### 5. Validation rules
+### 7. In-game effects
 
-| Rule | Check point | Failure result |
-|------|-------------|----------------|
-| Trait count ≤ `max_traits` | On each selection | Prevent selection, show tooltip |
-| Trait point sum ≤ `trait_points` | On each selection | Prevent selection, show tooltip |
-| No opposites selected | On each selection | Auto-deselect opposite, or prevent |
-| At least 1 trait (optional) | On confirm | Allow 0 traits (valid) |
+Once the species exists, the `modifier` blocks apply continuously through the engine's static modifier system. No script runs at runtime, and the save game stores identifiers rather than modifier values, so a modifier change in the mod affects existing saves on the next load.
 
-### 6. Species creation confirmation
+## Example: biological species
 
-On "Create Empire" / "Save Species":
-
-1. Engine validates all rules above
-2. Serializes selected trait IDs to empire design
-3. Stores in save game / empire template
-4. Mod must remain enabled for traits to function in-game
-
-### 7. In-game trait effects
-
-Once species exists in-game:
-
-- `modifier` blocks apply continuously via Stellaris static modifier system
-- Effects: job output, growth speed, research speed, army stats, etc.
-- No runtime script execution; all effects are declarative static modifiers
-- Save game stores selected trait IDs; mod must be present on load
-
-## Example: Biological species creation
+Archetype `BIOLOGICAL` provides two trait points and seven trait slots.
 
 ```
-Archetype: BIOLOGICAL (trait_points=2, max_traits=7)
+Budget: 2 points, 7 traits
 
-Player selects:
-1. ui_trait_very_strong (cost=6)  → Budget: 2-6 = -4 ❌ EXCEEDS
-   → Engine prevents: "Not enough trait points"
-
-Player selects:
-1. ui_trait_strong (vanilla, cost=2)  → Budget: 2-2 = 0 ✓
-2. ui_trait_agile (cost=2)  → Budget: 0-2 = -2 ❌ EXCEEDS
-   → Engine prevents
-
-Player selects:
-1. ui_trait_strong (cost=2)  → Budget: 0
-2. ui_trait_uncreative (cost=-2)  → Budget: 0-(-2) = 2 ✓
-3. ui_trait_rapid_breeders (cost=2)  → Budget: 2-2 = 0 ✓
-4. ui_trait_natural_engineers (cost=2)  → Budget: 0-2 = -2 ❌ EXCEEDS
-
-Final valid selection (3 traits, 0 points remaining):
-- trait_strong (vanilla)
-- ui_trait_uncreative (custom negative)
-- trait_rapid_breeders (vanilla)
+1. ui_trait_brave (cost 2)          -> budget 0, traits 1
+2. ui_trait_extremely_agile (cost 8) -> refused: 0 - 8 would be negative
+3. ui_trait_uncreative (cost -2)     -> budget 2, traits 2
+4. ui_trait_very_undemanding (cost 3) -> budget -1 -> refused
+5. ui_trait_optimistic (cost 1)      -> budget 1, traits 3
 ```
 
-## Example: Machine species creation
+The final selection costs 2 + (-2) + 1 = 1 point and leaves one point unspent.
 
-```
-Archetype: MACHINE (trait_points=1, max_traits=7)
+## Example: machine empire
 
-Available mod traits (industry category only):
-- ui_trait_natural_engineers (cost=2) → too expensive
-- ui_trait_very_natural_engineers (cost=6) → too expensive
-- ui_trait_extremely_natural_engineers (cost=8) → too expensive
-- ui_trait_poor_engineers (cost=-2) → grants points
-- ui_trait_very_poor_engineers (cost=-6) → grants points
-- ui_trait_extremely_poor_engineers (cost=-8) → grants points
-- ui_trait_natural_physicists (cost=2) → too expensive
-- ui_trait_very_natural_physicists (cost=6) → too expensive
-- ui_trait_extremely_natural_physicists (cost=8) → too expensive
-- ui_trait_poor_physicists (cost=-2) → grants points
-- ui_trait_very_poor_physicists (cost=-6) → grants points
-- ui_trait_extremely_poor_physicists (cost=-8) → grants points
-- ui_trait_natural_sociologists (cost=2) → too expensive
-- ui_trait_very_natural_sociologists (cost=6) → too expensive
-- ui_trait_extremely_natural_sociologists (cost=8) → too expensive
-- ui_trait_poor_sociologists (cost=-2) → grants points
-- ui_trait_very_poor_sociologists (cost=-6) → grants points
-- ui_trait_extremely_poor_sociologists (cost=-8) → grants points
-
-With 1 trait point, Machine can only pick negative industry traits
-or vanilla machine traits (cost 1).
-```
+Archetype `MACHINE` provides one trait point and seven trait slots, and offers no mod traits, so the player spends the point and the slots on vanilla machine traits only.
 
 ## Edge cases
 
-| Scenario | Behaviour |
-|----------|-----------|
-| Mod disabled after species creation | Traits show as missing, species may be invalid |
-| Mod updated, trait IDs changed | Save game references old IDs → missing traits |
-| Trait `cost` changed in mod update | Existing species retain old costs; new species use new costs |
-| `allowed_archetypes` changed | Existing species unaffected; new species use new filter |
-| `opposites` changed | Existing species unaffected; new species use new opposites |
+| Scenario | Conduct |
+|----------|---------|
+| Mod disabled after a species is created | The stored identifiers no longer resolve and the traits are lost |
+| Identifier renamed in an update | Existing saves and designs lose the trait |
+| `cost` changed in an update | Existing species retain their design; new selections use the new values |
+| `allowed_archetypes` changed | Existing species are unaffected; new selections use the new filter |
+| `opposites` changed | Existing species are unaffected; new selections use the new exclusions |
+| Icon file renamed | The trait remains valid and displays a placeholder |
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
 | [Mod load flow](./mod-load.md) | Engine load sequence |
-| [Components/trait-definitions.md](../components/trait-definitions.md) | Trait fields used in selection |
+| [Trait selection flow](./trait-selection.md) | Selection detail and persistence |
+| [Components/trait-definitions.md](../components/trait-definitions.md) | Fields used during selection |
 | [Components/archetype-config.md](../components/archetype-config.md) | Archetype limits |
-| [Data model](../data-model.md) | Scaling policy, trait catalogue |

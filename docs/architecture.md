@@ -1,16 +1,16 @@
 # Architecture
 
-This document elaborates on the root [ARCHITECTURE.md](../ARCHITECTURE.md) with implementation-level detail for maintainers and contributors. It covers the mod's declarative data-driven plugin architecture, the exact file contracts, and the integration boundaries with the Stellaris engine.
+This document elaborates on the root [ARCHITECTURE.md](../ARCHITECTURE.md) with implementation-level detail for maintainers and contributors. It covers the declarative content architecture, the file contracts, and the integration boundaries with the Stellaris engine.
 
 ## Architectural style
 
-The mod follows a **declarative data-driven plugin** architecture. All content is expressed as static files interpreted by the Stellaris engine at load time:
+The mod follows a **declarative, data-driven host-content** architecture. All content is expressed as static files interpreted by the Stellaris engine at load time:
 
-- **Clausewitz script** (`.txt`) — trait definitions, archetype configuration
+- **Clausewitz script** (`.txt`) — trait definitions and archetype limits
 - **YAML localisation** (`.yml`) — display names and descriptions
 - **DDS images** (`.dds`) — trait icons
 
-The mod supplies no executable code, scripts, or runtime services. The Stellaris engine is the sole runtime; the mod is a passive data package.
+The mod supplies no executable code, scripts, or runtime services. The Stellaris engine is the sole runtime; the mod is a passive content package.
 
 ```mermaid
 flowchart TB
@@ -30,15 +30,16 @@ flowchart TB
 
 **Paths:**
 - `ui-species-traits.mod` (repository root)
-- `ui-species-traits/descriptor.mod` (mod folder root)
+- `ui-species-traits/descriptor.mod` (mod directory root)
 
 **Responsibilities:**
-- Declare mod metadata: `version`, `name`, `path`, `tags`, `supported_version`
-- Provide the entry point for the launcher and engine
+- Declare mod metadata: `version`, `name`, `path`, `tags`, and `supported_version`
+- Provide the entry point for the launcher and the engine
 
 **Boundary rules:**
-- Must remain at repository root and mod root respectively
-- `supported_version` must match the target Stellaris version branch (currently `v4.5.*` in descriptors, `4.4.*` in README — see [Known Limitations](../README.md#known-limitations))
+- Must remain at the repository root and the mod directory root respectively
+- Both descriptors declare identical values, and the release workflows rewrite `version` in both
+- `supported_version` must match the targeted Stellaris branch; both currently declare `v4.5.*`
 - Purely declarative; no executable logic
 
 ### Archetype area
@@ -47,32 +48,33 @@ flowchart TB
 - `ui-species-traits/common/species_archetypes/00_species_archetypes.txt`
 
 **Responsibilities:**
-- Define trait points and maximum selectable traits for each species archetype
-- Increase limits: BIOLOGICAL/MACHINE to 7 traits and 2/1 trait points; ROBOT to 6 traits and 0 trait points
+- Define trait points and maximum selectable traits per species archetype
+- Raise the limits to two points and seven traits for `BIOLOGICAL` and `PRESAPIENT`, one point and seven traits for `MACHINE`, and zero points and six traits for `ROBOT`
 
 **Boundary rules:**
-- Uses variable references (`@species_trait_points`, `@species_max_traits`, etc.) for maintainability
-- `LITHOID` inherits from `BIOLOGICAL` via `inherit_trait_points_from`
-- `PRESAPIENT` and `OTHER` disable modifiers via `uses_modifiers = no`
+- Uses the shared variables `@species_trait_points`, `@species_max_traits`, `@machine_trait_points`, `@machine_max_traits`, `@robot_trait_points`, and `@robot_max_traits`
+- `LITHOID` inherits its limits from `BIOLOGICAL` via `inherit_trait_points_from`
+- `PRESAPIENT` and `OTHER` declare `uses_modifiers = no`
+- Archetypes constrain selection but never reference individual trait identifiers
 
 ### Trait definition area
 
 **Paths:**
-- `ui-species-traits/common/traits/ui-traits_species.txt` (38 custom traits)
-- `ui-species-traits/common/traits/ui-traits_species_newtiers.txt` (20 vanilla-family tier extensions)
+- `ui-species-traits/common/traits/ui-traits_species.txt` (38 definitions)
+- `ui-species-traits/common/traits/ui-traits_species_newtiers.txt` (20 additional tiers)
 
 **Responsibilities:**
-- Define 58 species traits (positive and negative) covering combat, population, science, economy, habitability, and lifespan
-- Extend vanilla trait families with Very and Extremely tiers using a documented scaling policy
+- Define the 58 traits, including costs, opposites, allowed archetypes, and static modifiers
+- Extend vanilla trait families with Very and Extremely tiers following the documented scaling policy
 
 **Boundary rules:**
-- Trait IDs follow the `ui_trait_*` prefix for custom traits; vanilla-extended tiers use `ui_trait_very_*` and `ui_trait_extremely_*`
-- Each trait specifies: `cost`, `category`, `opposites`, `allowed_archetypes`, `tags`, `modifier` block, `slave_cost`, `ai_weight`
-- **No `icon` field is present in trait definitions** — icons are loaded by filename convention (`GFX_trait_<id>`)
-- `opposites` lists mutually exclusive trait IDs (vanilla and custom)
-- `allowed_archetypes` restricts to `BIOLOGICAL`, `LITHOID`, or both
-- `modifier` blocks use Stellaris static modifiers (e.g., `planet_jobs_food_produces_mult`, `pop_environment_tolerance`)
-- Scaling policy documented in file headers; not enforced by tooling
+- Identifiers use the `ui_trait_*` prefix; additional tiers use `ui_trait_very_*` and `ui_trait_extremely_*`
+- Every entry declares `cost`, `opposites`, `allowed_archetypes`, and a `modifier` block
+- Entries in `ui-traits_species.txt` declare no `category`, `tags`, `ai_weight`, or `species_potential_add`; entries in `ui-traits_species_newtiers.txt` additionally declare `category`, `tags`, `slave_cost`, eligibility blocks, and, in some cases, `assembly_score` and `ai_weight`
+- **No `icon` field exists in any trait definition** — icons resolve by filename convention
+- `opposites` lists mutually exclusive identifiers from the mod and from vanilla
+- `allowed_archetypes` restricts every trait to `BIOLOGICAL` alone or `BIOLOGICAL` and `LITHOID`; no trait declares `MACHINE` or `ROBOT`
+- The scaling policy is recorded in file header comments and is not enforced by tooling
 
 ### Localisation area
 
@@ -81,141 +83,144 @@ flowchart TB
 - `ui-species-traits/localisation/english/ui-species-traits_newtiers_l_english.yml`
 
 **Responsibilities:**
-- Provide English display names (`ui_trait_*:0`) and descriptions (`ui_trait_*_desc:0`) for all traits
-- Use `§L...§!` formatting for in-game description styling
+- Provide `ui_trait_*:0` display names and `ui_trait_*_desc:0` descriptions for all 58 traits
+- Style descriptions with `§L...§!` markers
 
 **Boundary rules:**
-- File encoding: UTF-8 with BOM (Stellaris requirement)
-- Keys must exactly match trait IDs from trait definition files
-- Only English (`l_english`) is currently provided
+- Keys must match trait identifiers exactly; a missing key renders the raw identifier
+- Only English (`l_english`) is supplied
+- The additional-tiers file carries a UTF-8 byte-order mark; the trait-definitions file does not. See [components/localisation.md](./components/localisation.md)
 
 ### Asset area
 
 **Paths:**
-- `ui-species-traits/gfx/interface/icons/traits/*.dds` (58 files)
+- `ui-species-traits/gfx/interface/icons/traits/*.dds` (60 files)
 
 **Responsibilities:**
-- Provide a dedicated icon for each custom trait and tier
-- Referenced by the engine via `GFX_trait_<id>` convention (filename-based)
+- Provide an icon for every `ui_trait_*` identifier, plus two files inherited from earlier artwork (`trait_very_strong`, `trait_venerable`)
+- Support the engine's filename-based icon resolution
 
 **Boundary rules:**
-- Format: DDS (DirectDraw Surface), required by Stellaris
-- Naming: `trait_<trait_id>.dds` or `ui_trait_<trait_id>.dds` matching the `GFX_trait_<id>` reference
+- Format is DDS, as the engine requires; no runtime conversion occurs
+- Filenames must match trait identifiers, because resolution is name-based
 - No subdirectories; all icons reside directly in `traits/`
 
 ## Data architecture
 
-The mod owns no persistent state at runtime. All data is static configuration loaded by the engine at startup.
+The mod owns no mutable state. All content is static configuration consumed at startup.
 
 ```mermaid
 flowchart LR
-    TraitDefs[Trait Definitions\ncommon/traits/*.txt] --> Engine[Stellaris Engine]
-    Archetypes[Archetype Config\ncommon/species_archetypes/*.txt] --> Engine
+    TraitDefs[Trait definitions\ncommon/traits/*.txt] --> Engine[Stellaris Engine]
+    Archetypes[Archetype limits\ncommon/species_archetypes/*.txt] --> Engine
     Loc[Localisation\nlocalisation/english/*.yml] --> Engine
     Icons[Icons\ngfx/interface/icons/traits/*.dds] --> Engine
-    Engine --> SpeciesUI[Species Creation UI]
+    Engine --> SpeciesUI[Species creation interface]
 ```
 
 | Data or Store | Owner | Representation and Storage | Lifecycle or Consistency |
 |---------------|-------|----------------------------|--------------------------|
-| Trait definitions | Trait Definition Area | Clausewitz script (`.txt`) in `common/traits/` | Static; loaded once at game start |
-| Archetype config | Archetype Area | Clausewitz script (`.txt`) in `common/species_archetypes/` | Static; loaded once at game start |
-| Localisation strings | Localisation Area | YAML (`.yml`) in `localisation/english/` | Static; loaded once at game start |
-| Trait icons | Asset Area | DDS images in `gfx/interface/icons/traits/` | Static; loaded once at game start |
-| Mod descriptors | Descriptor Area | Clausewitz script (`.mod`) at root and mod root | Static; read by launcher and engine |
+| Trait definitions | Trait definition area | Clausewitz script (`.txt`) in `common/traits/` | Static; parsed once per game start |
+| Archetype limits | Archetype area | Clausewitz script (`.txt`) in `common/species_archetypes/` | Static; parsed once per game start |
+| Localisation strings | Localisation area | YAML (`.yml`) in `localisation/english/` | Static; parsed once per game start |
+| Trait icons | Asset area | DDS images in `gfx/interface/icons/traits/` | Static; resolved once per game start |
+| Mod descriptors | Descriptor area | Clausewitz script (`.mod`) at the repository and mod roots | Static; read by the launcher and the engine |
+| Trait selections | Stellaris engine | Save-game data | Engine-owned; requires the mod on load |
 
 ## Interfaces and integrations
 
-| Interface | Direction | Contract | Owner | Failure Semantics |
+| Interface | Direction | Contract | Owner | Failure semantics |
 |-----------|-----------|----------|-------|-------------------|
-| Mod descriptor | Engine → Mod | `descriptor.mod` / `ui-species-traits.mod` with `version`, `name`, `path`, `tags`, `supported_version` | Descriptor Area | Mod not listed or version mismatch → mod disabled |
-| Species archetypes | Engine → Mod | `common/species_archetypes/*.txt` defining trait points and max traits per archetype | Archetype Area | Parse error → archetype defaults used |
-| Trait definitions | Engine → Mod | `common/traits/*.txt` with `cost`, `category`, `opposites`, `allowed_archetypes`, `modifier`, `slave_cost`, `ai_weight` | Trait Definition Area | Parse error → trait omitted; missing icon → placeholder |
-| Localisation | Engine → Mod | `localisation/english/*.yml` with `l_english:` keys matching trait IDs | Localisation Area | Missing key → raw ID displayed |
-| Trait icons | Engine → Mod | `gfx/interface/icons/traits/*.dds` loaded by `GFX_trait_<id>` convention | Asset Area | Missing file → placeholder icon |
+| Mod descriptor | Engine → Mod | `descriptor.mod` / `ui-species-traits.mod` with `version`, `name`, `path`, `tags`, `supported_version` | Descriptor area | Mod not listed or version mismatch → mod disabled |
+| Species archetypes | Engine → Mod | `common/species_archetypes/*.txt` defining trait points and maximum traits per archetype | Archetype area | Parse error → archetype defaults used |
+| Trait definitions | Engine → Mod | `common/traits/*.txt` with `cost`, `opposites`, `allowed_archetypes`, `modifier` | Trait definition area | Parse error → trait omitted; missing icon → placeholder |
+| Localisation | Engine → Mod | `localisation/english/*.yml` with `l_english` keys matching trait identifiers | Localisation area | Missing key → raw identifier displayed |
+| Trait icons | Engine → Mod | `gfx/interface/icons/traits/*.dds` resolved as `GFX_trait_<identifier>` by filename | Asset area | Missing file → placeholder icon |
 
 ## Dependency direction and rules
 
-- **Descriptor → All Areas:** The mod descriptor is the root; it must exist for the mod to be recognised.
-- **Trait Definitions → Localisation:** Every trait ID in `common/traits/` must have a corresponding key in `localisation/english/`.
-- **Trait Definitions → Assets:** Every trait ID must have a matching `.dds` file in `gfx/interface/icons/traits/` (by filename convention).
-- **Archetype Area → Trait Definitions:** Archetype trait-point and max-trait limits constrain which traits are selectable but do not reference specific trait IDs.
-- **No circular dependencies:** All dependencies flow from engine to static mod files; the mod has no internal runtime dependencies.
-- **Prohibited coupling:** Trait definitions must not reference other mod files by path; only by trait ID in `opposites` and `allowed_archetypes`.
+- **Descriptor → All areas:** the mod descriptor is the root; it must exist for the mod to be recognised.
+- **Trait definitions → Localisation:** every trait identifier in `common/traits/` must have a name key and a description key in `localisation/english/`.
+- **Trait definitions → Assets:** every trait identifier must have a matching `.dds` file in `gfx/interface/icons/traits/`.
+- **Archetype area → Trait definitions:** archetype limits constrain which traits are selectable but never reference specific identifiers.
+- **No circular dependencies:** all dependencies flow from the engine to static mod files; the mod has no internal runtime dependencies.
+- **Prohibited coupling:** trait definitions must not reference other mod files by path; cross-references use identifiers in `opposites` only.
 
 ## External dependencies
 
 | Dependency | Version | Scope | Purpose |
 |------------|---------|-------|---------|
-| Stellaris Game Engine | `4.4.*` / `4.5.*` | Runtime | Parses all mod files; provides species creation UI |
-| Clausewitz Script Parser | Built into Stellaris | Build/Load | Interprets `.txt` and `.mod` files |
-| YAML Parser | Built into Stellaris | Build/Load | Interprets `.yml` localisation files |
-| DDS Image Loader | Built into Stellaris | Build/Load | Loads `.dds` trait icons |
+| Stellaris game engine | `4.5.*` | Runtime | Parses all mod files; provides the species creation interface |
+| Clausewitz script parser | Built into Stellaris | Load | Interprets `.txt` and `.mod` files |
+| YAML parser | Built into Stellaris | Load | Interprets `.yml` localisation files |
+| DDS image loader | Built into Stellaris | Load | Loads `.dds` trait icons |
 
-No third-party libraries, package managers, or build tools are required. The mod is a pure data package.
+No third-party libraries, package managers, or build tools are required. The mod is a content package.
 
 ## Deployment and operations
 
-- **Process topology:** None. The mod is a static archive extracted to the Stellaris mod directory.
-- **Deployment model:** Manual installation (extract archive to mod directory) or platform-managed (Steam Workshop, Nexus Mods, Paradox Mods subscribe/install).
-- **Persistent state:** None owned by the mod. Stellaris manages playset enablement and save-game trait selections.
-- **Scaling assumptions:** Single-player and multiplayer compatible; no server component.
-- **Operational consequences:** Mod updates require re-extraction or platform update; save games with custom traits require the mod to remain enabled.
+- **Process topology:** none. The mod is a static archive extracted into the Stellaris mod directory.
+- **Deployment model:** manual extraction or platform-managed installation through the Steam Workshop, Nexus Mods, or Paradox Mods.
+- **Persistent state:** none owned by the mod. Stellaris manages playset activation and save-game trait selections.
+- **Scaling assumptions:** single-player and multiplayer with identical content on every client; no server component.
+- **Operational consequences:** updates require re-extraction or a platform update, and a save created with these traits requires the mod to remain active.
 
 ## Compatibility contracts
 
-| Contract | Owner | Invariant | Verification Method | Change Policy |
+| Contract | Owner | Invariant | Verification method | Change policy |
 |----------|-------|-----------|---------------------|---------------|
-| `supported_version` | Descriptor Area | Must match target Stellaris version branch | Launcher validation at mod load | Update on new Stellaris major version |
-| Trait ID ↔ Localisation key | Trait Definition Area / Localisation Area | Every `ui_trait_*` ID has `ui_trait_*:0` and `ui_trait_*_desc:0` in `.yml` | Manual review; engine shows raw ID if missing | Add localisation when adding traits |
-| Trait ID ↔ Icon file | Trait Definition Area / Asset Area | Every `ui_trait_*` ID has matching `.dds` in `gfx/interface/icons/traits/` | Manual review; engine shows placeholder if missing | Add icon when adding traits |
-| Trait scaling policy | Trait Definition Area | Very tiers: x11/6 effects, x3 cost; Extremely: +20% effects, cost x4 base | Documented in file headers; not automated | Policy changes require rebalancing all tiers |
-| Archetype limits | Archetype Area | BIOLOGICAL/MACHINE: 7 traits, 2/1 points; ROBOT: 6 traits, 0 points | Engine enforces at species creation | Adjust variables in `00_species_archetypes.txt` |
+| `supported_version` | Descriptor area | Must match the targeted Stellaris branch | Launcher validation at mod load | Update on a new Stellaris branch |
+| Trait identifier ↔ localisation key | Trait definition and localisation areas | Every `ui_trait_*` identifier has `ui_trait_*:0` and `ui_trait_*_desc:0` | Manual inspection; the engine displays the raw identifier when a key is absent | Add both keys with every trait |
+| Trait identifier ↔ icon file | Trait definition and asset areas | Every `ui_trait_*` identifier has a matching `.dds` file | Manual inspection; the engine displays a placeholder when the file is absent | Add the icon with every trait |
+| Vanilla identifier references | Trait definition area | Identifiers named in `opposites` exist in the targeted game version | Manual inspection after each game update | Revalidate after every Stellaris release |
+| Tier scaling policy | Trait definition area | Very tiers target 11/6 effects at triple cost; Extremely tiers add 20 per cent | Documented in file headers; not automated | Rebalance all affected tiers together |
+| Archetype limits | Archetype area | `BIOLOGICAL` and `PRESAPIENT` use two points and seven traits; `MACHINE` one point and seven; `ROBOT` zero points and six | Engine enforcement in species creation | Adjust the shared variables |
+| Archive layout | Release workflows | `ui-species-traits.mod` and `ui-species-traits/` remain at the archive root | Manual archive inspection | Preserve the layout in every packaging change |
 
 ## Testing and verification
 
 - **No automated test suite exists.** Verification is manual:
-  1. Install mod locally (extract to Stellaris mod directory).
-  2. Enable in launcher.
-  3. Start Stellaris and open species creation.
-  4. Verify all 58 custom traits appear with correct names, descriptions, icons, costs, and modifiers.
-  5. Verify Very/Extremely tiers for vanilla families appear and scale correctly.
-  6. Verify archetype trait-point and max-trait limits apply (biological/machine 7 traits, robot 6 traits).
-  7. Verify no script errors in `error.log` or console.
-- **Material coverage gaps:** No automated regression testing; no CI pipeline for content validation.
-- **Prohibitions:** Do not commit untested trait definitions; do not modify vanilla trait IDs in `opposites` without verifying they exist in the target Stellaris version.
+  1. Extract the archive into the Stellaris mod directory and activate the mod in the launcher.
+  2. Start Stellaris and open species creation.
+  3. Confirm that all 58 traits appear with their names, descriptions, icons, costs, and modifiers.
+  4. Confirm that the additional Very and Extremely tiers extend the expected vanilla families.
+  5. Confirm the archetype limits: seven traits for `BIOLOGICAL`, `PRESAPIENT`, and `MACHINE`, and six for `ROBOT`.
+  6. Confirm that `opposites` restrictions are enforced and that no placeholder icons appear.
+  7. Inspect the Stellaris error log for parse failures, missing keys, or missing icons.
+- **Material coverage gaps:** no automated regression testing and no continuous integration check for content.
+- **Prohibitions:** do not commit unverified trait definitions, and do not reference vanilla identifiers in `opposites` without confirming that they exist in the targeted game version.
 
 ## Design constraints
 
-- **Stellaris version coupling:** `supported_version="v4.5.*"` (descriptors) / `4.4.*` (README) ties the mod to the 4.4.x/4.5.x branch. New major versions require descriptor updates and potential trait rebalancing.
-- **Clausewitz script limitations:** No variables, loops, or functions in trait definitions; all values are literal.
-- **Localisation single-language:** Only English provided; adding languages requires new `localisation/<locale>/` directories and `.yml` files.
-- **Icon format lock-in:** DDS is mandatory; no runtime conversion from PNG or other formats.
-- **Trait count limits:** Engine enforces `species_max_traits` per archetype; cannot be exceeded by mod configuration alone.
-- **No runtime modification:** Traits cannot be added, removed, or modified during gameplay; all changes require game restart.
-- **Scaling policy not enforced:** The documented x11/6 and +20% scaling is a design convention; the engine does not validate it.
-- **Icon loading convention:** Icons are loaded by filename (`GFX_trait_<id>`), not by explicit `icon =` field in trait definitions. This differs from some vanilla traits and must be maintained for consistency.
+- **Version coupling:** `supported_version="v4.5.*"` ties the mod to the 4.5 branch; a new branch requires descriptor updates and revalidation of every vanilla identifier reference.
+- **Clausewitz script limitations:** trait entries are declarative literals; there is no conditional logic, loop, or computed value inside them.
+- **Single language:** only English exists; another language requires a new locale directory and translated keys.
+- **Icon format lock-in:** DDS is mandatory, and icons resolve by filename, so an identifier rename breaks the icon silently.
+- **Archetype restriction:** every trait is limited to `BIOLOGICAL` alone or `BIOLOGICAL` and `LITHOID`, so neither `MACHINE` nor `ROBOT` species receive mod traits regardless of their trait points.
+- **Engine-enforced limits:** trait points and maximum trait counts are applied per archetype and are unable to be exceeded by mod configuration alone.
+- **No runtime modification:** content changes take effect only after a restart.
+- **Convention-only balance:** the scaling policy is documentation; nothing validates it.
 
 ## Extension points
 
-- **New custom traits:** Add entries to `ui-traits_species.txt` (or a new `.txt` in `common/traits/`), add localisation keys, add icon `.dds`.
-- **New tier extensions for vanilla traits:** Add entries to `ui-traits_species_newtiers.txt` following the documented scaling policy.
-- **Additional archetypes:** Extend `00_species_archetypes.txt` with new archetype blocks (rarely needed).
-- **New languages:** Create `localisation/<locale>/` with translated `.yml` files.
-- **Icon replacements:** Replace `.dds` files in `gfx/interface/icons/traits/` keeping the same filename.
+- **Trait definitions:** add an entry to `ui-traits_species.txt`, or a new file in `common/traits/`, then add the localisation keys and the icon.
+- **Additional tiers for vanilla families:** add an entry to `ui-traits_species_newtiers.txt` following the documented scaling policy.
+- **Additional archetype limits:** extend `00_species_archetypes.txt`; this is rarely required.
+- **Additional languages:** create `localisation/<locale>/` with translated files that retain every key unchanged.
+- **Icon replacement:** replace a `.dds` file in `gfx/interface/icons/traits/`, keeping the filename.
 
-Integration location: All extensions are additive file placements within the existing directory structure; no registration or composition root modification is required.
+Integration location: all extensions are additive file placements inside the existing directory structure; no registration or composition root modification is required.
 
 ## Source map
 
-| Area | Repository-Relative Paths |
+| Area | Repository-relative paths |
 |------|---------------------------|
 | Descriptor | `ui-species-traits.mod`, `ui-species-traits/descriptor.mod` |
 | Archetype | `ui-species-traits/common/species_archetypes/00_species_archetypes.txt` |
-| Trait Definitions | `ui-species-traits/common/traits/ui-traits_species.txt`, `ui-species-traits/common/traits/ui-traits_species_newtiers.txt` |
+| Trait definitions | `ui-species-traits/common/traits/ui-traits_species.txt`, `ui-species-traits/common/traits/ui-traits_species_newtiers.txt` |
 | Localisation | `ui-species-traits/localisation/english/ui-species-traits_l_english.yml`, `ui-species-traits/localisation/english/ui-species-traits_newtiers_l_english.yml` |
 | Assets | `ui-species-traits/gfx/interface/icons/traits/*.dds` |
-| Source Assets | `src/trait.xcf` (GIMP source for icons) |
+| Source artwork | `src/trait.xcf` |
 | Distribution | `.github/workflows/github-release.yml`, `.github/workflows/nexus-mods-release.yml`, `.github/workflows/steam-workshop-release.yml` |
 
 ## Related documentation
@@ -225,9 +230,9 @@ Integration location: All extensions are additive file placements within the exi
 | [Repository overview](./repository-overview.md) | Purpose, scope, entry points |
 | [Repository structure](./repository-structure.md) | Source tree layout, module organisation |
 | [Data model](./data-model.md) | Trait definition schema, scaling policy, trait catalogue |
-| [Components](./components/) | Per-area deep dives |
+| [Components](./components/) | Per-area detail |
 | [Flows](./flows/) | End-to-end execution flows |
 | Root [ARCHITECTURE.md](../ARCHITECTURE.md) | Architectural boundaries and contracts |
 | Root [README.md](../README.md) | Project overview, installation, capabilities |
 | Root [CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution guidelines |
-| [Trait Catalogue (Wiki)](https://github.com/hmlendea/stellaris-ui-species-traits/wiki/Traits) | Detailed trait list with effects and costs |
+| [Trait Catalogue (Wiki)](https://github.com/hmlendea/stellaris-ui-species-traits/wiki/Traits) | Trait list with effects and costs |

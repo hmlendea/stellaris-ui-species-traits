@@ -1,154 +1,110 @@
 # Dependencies
 
-This document describes the external dependencies, version coupling, and compatibility requirements for the Universum Infinitum - Species Traits mod.
-
-## Dependency overview
-
-The mod has **no third-party libraries, package managers, or build tools**. All dependencies are provided by the Stellaris game engine itself.
-
-```mermaid
-flowchart LR
-    Mod[Universum Infinitum\nSpecies Traits] --> Engine[Stellaris Game Engine]
-    Engine --> Parser[Clausewitz Script Parser]
-    Engine --> Yaml[YAML Parser]
-    Engine --> Dds[DDS Image Loader]
-    Engine --> UI[Species Creation UI]
-    Engine --> Mods[Mod Manager]
-```
+This document lists the runtime, development, and distribution dependencies of the mod, and explains the version coupling that governs compatibility.
 
 ## Runtime dependencies
 
 | Dependency | Version | Scope | Purpose | Provider |
 |------------|---------|-------|---------|----------|
-| Stellaris Game Engine | `4.4.*` / `4.5.*` | Runtime | Parses all mod files; provides species creation UI | Paradox Interactive |
-| Clausewitz Script Parser | Built into Stellaris | Load | Interprets `.txt` and `.mod` files | Paradox Interactive |
-| YAML Parser | Built into Stellaris | Load | Interprets `.yml` localisation files | Paradox Interactive |
-| DDS Image Loader | Built into Stellaris | Load | Loads `.dds` trait icons | Paradox Interactive |
+| Stellaris game engine | `4.5.*` | Runtime | Parses all mod files and provides the species creation interface | Paradox Interactive |
+| Clausewitz script parser | Built into Stellaris | Load | Interprets `.txt` and `.mod` files | Paradox Interactive |
+| YAML parser | Built into Stellaris | Load | Interprets `.yml` localisation files | Paradox Interactive |
+| DDS image loader | Built into Stellaris | Load | Loads `.dds` trait icons | Paradox Interactive |
 
 ## Version coupling
 
-### Supported version declaration
-
-Both descriptor files declare:
+Both descriptors declare:
 
 ```clausewitz
-supported_version = "v4.5.*"
+supported_version="v4.5.*"
 ```
 
-This couples the mod to Stellaris 4.5.x. The launcher enforces this at mod activation.
+The launcher enforces this at activation.
 
-### Version mismatch behaviour
+| Game version | Conduct |
+|--------------|---------|
+| `4.5.*` | Enabled and functional |
+| Earlier branches | Shown as incompatible |
+| Later branches | Shown as incompatible until the declaration is raised |
 
-| Game version | Mod behaviour |
-|--------------|---------------|
-| 4.5.x | ✅ Enabled, fully functional |
-| 4.4.x | ⚠️ May work (README states 4.4.*), but descriptor says 4.5.* |
-| 4.6.x | ❌ Disabled by launcher (version mismatch) |
-| 3.x | ❌ Disabled by launcher |
-
-### Version update triggers
+### Update triggers
 
 | Trigger | Required action |
 |---------|-----------------|
-| Stellaris 4.6 release | Update `supported_version` to `v4.6.*`, verify traits, test, release |
-| Stellaris 4.5.x patch | No action (wildcard covers patches) |
-| Trait modifier renamed in engine | Update trait definitions, test, release |
-| New archetype added by DLC | Add to `allowed_archetypes` if applicable |
+| New Stellaris branch | Raise `supported_version` in both descriptors, revalidate every referenced vanilla identifier, and release |
+| Patch within the supported branch | No action; the wildcard covers it |
+| A modifier key renamed by the engine | Update the affected trait definitions and release |
+| A vanilla trait used in `opposites` renamed or removed | Update the reference and release |
 
-## Compatibility matrix
+## Content overlap
 
-| Component | Vanilla Stellaris | UI Species Traits Mod | Notes |
-|-----------|-------------------|----------------------|-------|
-| Trait definitions | `common/traits/*.txt` | `common/traits/ui-traits_*.txt` | Additive; no vanilla file modification |
-| Archetype config | `common/species_archetypes/*.txt` | `common/species_archetypes/00_species_archetypes.txt` | Overrides vanilla limits |
-| Localisation | `localisation/english/*.yml` | `localisation/english/ui-species-traits_*.yml` | Additive; new keys only |
-| Icons | `gfx/interface/icons/traits/*.dds` | `gfx/interface/icons/traits/*.dds` | Additive; new files only |
+| Component | Vanilla path | Mod path | Interaction |
+|-----------|--------------|----------|-------------|
+| Trait definitions | `common/traits/` | `common/traits/ui-traits_*.txt` | Additive; no vanilla file is modified |
+| Archetype limits | `common/species_archetypes/` | `common/species_archetypes/00_species_archetypes.txt` | Declares the same archetypes; the load order decides which declaration the engine applies |
+| Localisation | `localisation/english/` | `localisation/english/ui-species-traits_*.yml` | Additive; new keys only |
+| Icons | `gfx/interface/icons/traits/` | `gfx/interface/icons/traits/` | Additive; new files only |
 
-### Overlap risk
+The archetype file is the only place where the mod could conflict with another mod that also declares the same archetypes, because both files supply the same archetype names.
+
+### Risk
 
 | Risk | Severity | Mitigation |
 |------|----------|------------|
-| Trait ID collision with vanilla | Low | All mod traits use `ui_trait_` prefix |
-| Trait ID collision with other mods | Medium | `ui_trait_` prefix is mod-specific; other mods unlikely to use |
-| Archetype override conflict | Medium | `00_species_archetypes.txt` loads first (numeric prefix); other mods may override |
-| Localisation key collision | Low | Keys use `ui_trait_` prefix |
-| Icon filename collision | Low | Filenames use `ui_trait_` prefix |
+| Trait identifier collision with vanilla | Low | Every identifier uses the `ui_trait_` prefix |
+| Trait identifier collision with another mod | Low | The prefix is specific to this mod |
+| Archetype declaration conflict | Medium | A second mod declaring the same archetypes competes for the same names; verify compatibility prior to combining mods |
+| Localisation key collision | Low | Keys follow the identifiers |
+| Icon filename collision | Low | Filenames follow the identifiers |
 
-## DLC dependencies
+## Game content dependencies
 
-| DLC | Required? | Impact |
-|-----|-----------|--------|
-| Base game | Yes | Mod requires Stellaris |
-| Species Pack | No | No dependency |
-| Lithoids Species Pack | No | LITHOID archetype exists in base game |
-| Machine Intelligence Pack | No | MACHINE/ROBOT archetypes exist in base game |
-| Aquatics Species Pack | No | No dependency |
-| Overlord | No | No dependency |
-| Toxoids Species Pack | No | No dependency |
-| First Contact Story Pack | No | No dependency |
-| Distant Stars Story Pack | No | No dependency |
-| Leviathans | No | No dependency |
-| Federations | No | No dependency |
-| Nemesis | No | No dependency |
-| Synthetic Dawn Story Pack | No | No dependency |
-| Apocalypse | No | No dependency |
-| Utopia | No | No dependency |
+No downloadable content is required or referenced. Every trait is limited to the `BIOLOGICAL` and `LITHOID` archetypes, and no trait, modifier, or identifier in the repository names content from a specific expansion.
 
-The mod works with the base game only. DLC content is not referenced.
-
-## Platform dependencies
+## Platform support
 
 | Platform | Supported | Notes |
 |----------|-----------|-------|
-| Windows | ✅ | Primary platform |
-| macOS | ✅ | Same mod files |
 | Linux | ✅ | Same mod files |
-| Steam Deck | ✅ | Linux-based; same mod files |
-| Console | ❌ | Stellaris console does not support mods |
+| macOS | ✅ | Same mod files |
+| Windows | ✅ | Same mod files |
+| Steam Deck | ✅ | Linux build of the game; same mod files |
+| Console | ❌ | The console build does not accept mods |
 
-## Distribution platform dependencies
+## Distribution dependencies
 
-| Platform | Workflow | Status |
-|----------|----------|--------|
-| Steam Workshop | `.github/workflows/steam-workshop-release.yml` | Automated |
-| Nexus Mods | `.github/workflows/nexus-mods-release.yml` | Automated |
-| Paradox Mods | Manual upload | Manual |
-| GitHub Releases | `.github/workflows/github-release.yml` | Automated on published release |
+| Platform | Workflow | Conduct |
+|----------|----------|---------|
+| Steam Workshop | `.github/workflows/steam-workshop-release.yml` | Automated on a version tag |
+| Nexus Mods | `.github/workflows/nexus-mods-release.yml` | Automated on a version tag |
+| GitHub Releases | `.github/workflows/github-release.yml` | Automated on release publication |
+| Paradox Mods | None | Manual upload |
 
 ## Development dependencies
 
-| Tool | Purpose | Required? |
-|------|---------|-----------|
-| GIMP | Icon editing (`src/trait.xcf`) | Optional (for icon creation) |
-| DDS plugin for GIMP | DDS export | Optional (for icon creation) |
-| Text editor | Editing `.txt` and `.yml` files | Yes |
+| Tool | Purpose | Required |
+|------|---------|----------|
+| Text editor | Edit `.txt`, `.yml`, and `.mod` files | Yes |
 | Git | Version control | Yes |
-| Stellaris | Testing | Yes |
+| Stellaris | In-game verification | Yes |
+| GIMP | Edit `src/trait.xcf` and export DDS icons | Only for icon work |
 
-No build tools, compilers, or package managers are required.
+No compiler, package manager, or build tool is involved.
 
-## File format dependencies
+## File formats
 
-| Format | Used for | Parser |
+| Format | Used for | Reader |
 |--------|----------|--------|
-| Clausewitz script (`.txt`, `.mod`) | Trait definitions, archetype config, descriptors | Stellaris engine |
-| YAML (`.yml`) | Localisation | Stellaris engine |
-| DDS (`.dds`) | Trait icons | Stellaris engine |
-| GIMP (`.xcf`) | Icon source assets | GIMP (development only) |
-
-## Security considerations
-
-- No network calls, no external data fetching
-- No executable code, no script execution
-- No user data collection
-- Mod files are read-only at runtime
-- Save game compatibility: mod must remain enabled for traits to function
+| Clausewitz script (`.txt`, `.mod`) | Trait definitions, archetype limits, descriptors | Engine |
+| YAML (`.yml`) | Localisation | Engine |
+| DDS (`.dds`) | Trait icons | Engine |
+| GIMP (`.xcf`) | Source artwork | GIMP, during development |
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
-| [Configuration](./configuration.md) | Descriptor fields, supported_version |
+| [Configuration](./configuration.md) | Descriptor fields and values |
 | [Build and deployment](./build-and-deployment.md) | Distribution workflows |
-| [Architecture](../architecture.md) | External dependencies table |
-| Root [README.md](../README.md) | Installation, system requirements |
+| [Architecture](../architecture.md) | External dependency table |
+| Root [README.md](../../README.md) | Installation, system requirements |

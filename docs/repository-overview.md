@@ -4,7 +4,7 @@ This document summarises the purpose, scope, entry points, and capabilities of t
 
 ## Purpose
 
-The repository hosts a Stellaris mod that adds 58 custom species traits, extends vanilla trait families with additional Very and Extremely tiers, and raises the maximum number of selectable traits per species archetype. The mod is a static data package: Clausewitz script definitions, YAML localisation, and DDS icons, interpreted by the Stellaris engine at load time.
+The repository hosts a Stellaris mod that adds 58 species trait definitions, extends established vanilla trait families with additional Very and Extremely tiers, and raises the maximum number of selectable traits per species archetype. The mod is a static content package: Clausewitz script definitions, YAML localisation, and DDS icons, interpreted by the Stellaris engine at load time.
 
 ## Scope
 
@@ -13,7 +13,7 @@ The repository hosts a Stellaris mod that adds 58 custom species traits, extends
 | Trait definitions (`common/traits/*.txt`) | Executable code |
 | Archetype limit adjustments (`common/species_archetypes/`) | Runtime services or processes |
 | English localisation (`localisation/english/*.yml`) | Languages other than English |
-| Trait icons (`gfx/interface/icons/traits/*.dds`) | Icon source files (only `src/trait.xcf` kept) |
+| Trait icons (`gfx/interface/icons/traits/*.dds`) | Additional icon source files (`src/trait.xcf` holds the sole artwork source) |
 | Mod descriptors (`*.mod`) | Save-game data |
 | Release workflows (`.github/workflows/`) | Automated content validation |
 
@@ -23,18 +23,18 @@ The repository hosts a Stellaris mod that adds 58 custom species traits, extends
 |-------------|------|
 | `ui-species-traits.mod` | Repository-root descriptor used by the Stellaris launcher to register the mod |
 | `ui-species-traits/descriptor.mod` | Mod-root descriptor read by the game engine |
-| `ui-species-traits/common/traits/ui-traits_species.txt` | 38 custom trait definitions |
-| `ui-species-traits/common/traits/ui-traits_species_newtiers.txt` | 20 Very/Extremely tier extensions for vanilla trait families |
-| `ui-species-traits/common/species_archetypes/00_species_archetypes.txt` | Trait points and max-trait limits per archetype |
+| `ui-species-traits/common/traits/ui-traits_species.txt` | 38 trait definitions |
+| `ui-species-traits/common/traits/ui-traits_species_newtiers.txt` | 20 additional tiers for vanilla trait families |
+| `ui-species-traits/common/species_archetypes/00_species_archetypes.txt` | Trait points and maximum trait counts per archetype |
 | `docs/INDEX.md` | Documentation navigation index |
 
 ## Capabilities
 
-- 38 custom positive and negative traits spanning combat, population, science, economy, habitability, lifespan, social, and special categories
-- 20 additional tiers (Very, Extremely) extending 11 vanilla trait families
-- Increased selection limits: 7 traits for BIOLOGICAL and MACHINE archetypes, 6 for ROBOT
-- Dedicated DDS icons for every trait, loaded by filename convention (`GFX_trait_<id>`)
-- English names and descriptions for all traits
+- 58 trait definitions spanning combat and army, research and unity, economy and upkeep, habitability, population growth, lifespan, social cohesion, and infrastructure
+- 20 additional Very and Extremely tiers extending established vanilla trait families
+- Raised selection limits: two trait points and seven traits for `BIOLOGICAL` and `PRESAPIENT` (inherited by `LITHOID`), one point and seven traits for `MACHINE`, and zero points and six traits for `ROBOT`
+- Dedicated DDS icons for every trait, resolved by filename convention
+- English names and descriptions for all 58 traits
 
 ## Distribution channels
 
@@ -47,7 +47,7 @@ The repository hosts a Stellaris mod that adds 58 custom species traits, extends
 
 ## Version targeting
 
-The descriptors declare `supported_version="v4.5.*"`. Documentation stating `4.4.*` predates this and requires reconciliation; see [operational/dependencies.md](./operational/dependencies.md).
+Both descriptors declare `supported_version="v4.5.*"` and `version="2.0.2"`. The launcher evaluates these at activation; see [operational/dependencies.md](./operational/dependencies.md) for the compatibility window.
 
 ## Related documents
 
@@ -56,4 +56,4 @@ The descriptors declare `supported_version="v4.5.*"`. Documentation stating `4.4
 | [README.md](../README.md) | Project overview, installation, capabilities |
 | [ARCHITECTURE.md](../ARCHITECTURE.md) | Architectural boundaries and contracts |
 | [repository-structure.md](./repository-structure.md) | Source tree layout |
-| [architecture.md](./architecture.md) | In-depth architectural documentation |
+| [architecture.md](./architecture.md) | Detailed architectural documentation |

@@ -1,13 +1,13 @@
 # Security Policy
 
-This project is a Stellaris mod consisting of static game definitions, localisation, and image assets. It contains no executable code, runtime dependencies, or network services. The security policy addresses the integrity of distributed mod assets and the reporting of supply-chain concerns.
+This project is a Stellaris mod consisting of static game definitions, localisation, and image assets. It contains no executable code, runtime dependencies, or network services. This policy concerns the integrity of the distributed mod archives and the reporting of supply-chain concerns.
 
 ## 📑 Table of Contents
 
-- [Supported Versions](#supported-versions)
-- [Reporting a Vulnerability](#reporting-a-vulnerability)
-- [Scope](#scope)
-- [Disclosure Policy](#disclosure-policy)
+- [Supported Versions](#-supported-versions)
+- [Reporting a Vulnerability](#-reporting-a-vulnerability)
+- [Scope](#-scope)
+- [Disclosure Policy](#-disclosure-policy)
 
 ## 🛡️ Supported Versions
 
@@ -35,15 +35,15 @@ To report a vulnerability:
 The original maintainers are not responsible for changes, modifications, or security issues introduced by downstream forks.
 
 The subsequent report categories are in scope for this repository:
-- Tampering with distributed mod archives or assets
-- Malicious modifications in pull requests or contributions
-- Supply-chain compromise of distribution channels
+- Tampering with the distributed mod archives or assets
+- Malicious modifications submitted through pull requests
+- Supply-chain compromise of a distribution channel
 
 The subsequent categories are out of scope unless explicitly stated to the contrary:
-- Game engine vulnerabilities in Stellaris itself
-- Platform vulnerabilities in Steam, Nexus Mods, or Paradox Mods
+- Vulnerabilities in the Stellaris game engine itself
+- Vulnerabilities in Steam, Nexus Mods, or Paradox Mods
 - Issues in unofficial mirrors or repacks
-- Mod compatibility or gameplay balance concerns
+- Compatibility or gameplay-balance concerns
 
 ## 📢 Disclosure Policy
 
@@ -52,3 +52,11 @@ This project follows coordinated disclosure:
 2. A remediation plan is prepared and validated.
 3. Public disclosure is published after a fix, mitigation, or agreed risk decision is available.
 4. Credit is attributed in accordance with reporter preference and project policy.
+
+## 🧾 Safe Harbour
+
+If your investigation is conducted in good faith, confined to authorised scope, and disclosed responsibly, the maintainers will not pursue action for policy-compliant activity.
+
+## 🙏 Recognition
+
+We appreciate responsible disclosure. Reporters who desire public attribution may be acknowledged in release notes, advisories, or a dedicated acknowledgements section.

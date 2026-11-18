@@ -1,179 +1,143 @@
 # Testing
 
-This document describes the testing strategy, verification procedures, and manual testing checklist for the Universum Infinitum - Species Traits mod.
+This document describes the verification strategy and the manual test procedures for the Universum Infinitum - Species Traits mod.
 
-## Testing philosophy
+## Approach
 
-The mod is a **pure data package** with no executable code. There is no automated test suite, CI pipeline, or unit tests. All verification is **manual** and performed by the developer/maintainer in-game.
+The mod is a content package with no executable code, so there is no unit test suite and no continuous integration check for content. Verification is manual and performed in game.
 
-### Why no automated tests?
+### Why no automation
 
-- Clausewitz script is declarative; engine parses at load time
-- No runtime logic to unit-test
-- Data validation (trait IDs, localisation keys, icon files) requires game context
-- Stellaris itself provides integration testing via species creation UI
+- The Clausewitz content is declarative and parsed by the engine at load time.
+- There is no runtime logic to exercise in isolation.
+- Validating identifiers, localisation keys, and icons requires the engine's content context.
+- Species creation in Stellaris serves as the integration surface.
 
 ## Test categories
 
-### 1. Load test
-
-Verify the mod loads without errors.
+### 1. Load verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Start Stellaris with mod enabled | No `error.log` entries mentioning `ui_trait_` or `ui-species-traits` |
-| 2 | Open species creation | All 58 traits visible in picker |
-| 3 | Check trait count | Exactly 58 traits listed |
-| 4 | Check archetype limits | BIOLOGICAL: 7 max, 2 points; MACHINE: 7 max, 1 point; ROBOT: 6 max, 0 points |
+| 1 | Start Stellaris with the mod active | No error-log entries mentioning `ui_trait_` or `ui-species-traits` |
+| 2 | Open species creation | All 58 trait definitions are offered for `BIOLOGICAL` species |
+| 3 | Confirm the limits | `BIOLOGICAL`: 2 points, 7 traits; `MACHINE`: 1 point, 7 traits; `ROBOT`: 0 points, 6 traits |
 
-### 2. Trait verification test
-
-Verify each trait's properties.
+### 2. Trait verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Create Biological species | All custom traits appear with correct names |
-| 2 | Hover each trait | Correct description shown with `§L...§!` formatting |
-| 3 | Select `ui_trait_very_strong` | Cost shows 6, icon shows correctly |
-| 4 | Verify modifiers | Console: `species_modifiers <id>` shows expected values |
-| 5 | Verify opposites | Selecting `ui_trait_agile` disables `ui_trait_sluggish`, etc. |
-| 6 | Verify archetype filtering | Machine species does not show physical/social traits |
+| 1 | Create a biological species | Every trait appears with its localised name |
+| 2 | Hover each trait | The description renders with its `§L...§!` styling |
+| 3 | Select `ui_trait_very_agile` | Cost displays 6 and the icon matches the identifier |
+| 4 | Inspect effective modifiers | The engine reports the values declared in the trait file |
+| 5 | Select `ui_trait_agile`, then `ui_trait_sluggish` | The second selection is refused |
+| 6 | Create a machine empire | No mod trait is offered |
 
-### 3. Tier scaling test
-
-Verify Very and Extremely tiers scale correctly.
+### 3. Tier verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Select `ui_trait_very_strong` | Cost = 6, modifiers = 1.5× base |
-| 2 | Select `ui_trait_extremely_strong` | Cost = 8, modifiers = 2.0× base |
-| 3 | Verify Extremely > Very | Effect values confirm +20% over Very |
-| 4 | Verify Very > Base | Effect values confirm 1.8–3.0× base |
-| 5 | Verify cost progression | Base(2) → Very(6) → Extremely(8): 3× then 4× |
+| 1 | Inspect `ui_trait_very_agile` | Cost 6, effect 1.833× the base tier |
+| 2 | Inspect `ui_trait_extremely_agile` | Cost 8, effect 2.2× the base tier |
+| 3 | Compare Very and Extremely | Extremely is 20 per cent stronger than Very |
+| 4 | Inspect a Lifespan tier | The modifier is additive years, not a multiplier |
+| 5 | Confirm cost progression | 2 → 6 → 8 for a two-point family; 1 → 3 → 4 for a one-point family |
 
-### 4. Archetype limit test
-
-Verify archetype trait point and max trait limits.
+### 4. Archetype verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Create Biological species | Trait point pool = 2 |
-| 2 | Select 7 traits | 8th rejected with "max traits" message |
-| 3 | Create Machine species | Trait point pool = 1 |
-| 4 | Create Robot species | Trait point pool = 0, max 6 traits |
-| 5 | Verify HOVERING inherits from MACHINE | Same as MACHINE |
-| 6 | Verify PSIONIC inherits from BIOLOGICAL | Same as BIOLOGICAL |
+| 1 | Create a biological species | Two trait points and seven trait slots |
+| 2 | Select seven traits | An eighth is refused |
+| 3 | Create a lithoid species | The same limits, inherited from `BIOLOGICAL` |
+| 4 | Create a machine empire | One trait point and seven trait slots, with no mod traits |
+| 5 | Create a robot species | Zero trait points and six trait slots |
 
-### 5. Localisation test
-
-Verify all trait names and descriptions display correctly.
+### 5. Localisation verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Create Biological species | All 38 custom trait names shown (not raw IDs) |
-| 2 | Create Biological species | All 20 tier trait names shown |
-| 3 | Hover trait | Description with `§L...§!` formatting renders correctly |
-| 4 | Verify no raw IDs | No `ui_trait_agile` displayed instead of "Agile" |
-| 5 | Verify BOM encoding | File opens correctly in Stellaris (no encoding errors) |
+| 1 | Inspect trait names | 58 names render, none as raw identifiers |
+| 2 | Inspect descriptions | 58 descriptions render with their styling intact |
+| 3 | Search for a raw identifier in the interface | None appears |
+| 4 | Reopen the files after editing | No encoding artefacts appear |
 
-### 6. Icon test
-
-Verify all icons load correctly.
+### 6. Icon verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Create Biological species | All 58 icons render in trait picker |
-| 2 | Verify tier icons | Very/Extremely icons differ from base icons |
-| 3 | Verify no placeholders | No generic question mark icons |
-| 4 | Verify DDS format | Icons open in GIMP without corruption |
+| 1 | Open the trait selector | Every trait displays its icon |
+| 2 | Inspect tier icons | Very and Extremely tiers differ from their base tier |
+| 3 | Search for placeholders | No placeholder image appears |
+| 4 | Open a few files in an image viewer | They decode as valid DDS images |
 
-### 7. Save game compatibility test
-
-Verify existing save games work with mod updates.
+### 7. Save compatibility verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Load existing save with mod v1.x | Species traits intact |
-| 2 | Update mod to v1.y | Traits still functional |
-| 3 | Disable mod, load save | Traits show as missing, species weakened |
-| 4 | Re-enable mod, load save | Traits restored |
+| 1 | Load a save that uses mod traits | The traits are intact |
+| 2 | Change a modifier value and reload | The save reflects the new value |
+| 3 | Disable the mod and load | The traits are lost |
+| 4 | Re-enable the mod and load | The traits return |
 
-### 8. AI behaviour test
-
-Verify AI picks reasonable traits.
+### 8. AI verification
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Generate AI empire | AI selects traits within budget |
-| 2 | Verify AI doesn't pick Extremely | Extremely too expensive for AI |
-| 3 | Verify AI picks focused traits | Militarist AI picks strong traits |
-| 4 | Verify AI respects opposites | No conflicting traits selected |
+| 1 | Generate an AI empire | The AI selects within its budget |
+| 2 | Inspect the AI selection | No Extremely positive tier, which is unaffordable |
+| 3 | Inspect for conflicts | No opposed pair is selected together |
 
-### 9. Edge case test
+### 9. Edge cases
 
 | Step | Action | Expected result |
 |------|--------|-----------------|
-| 1 | Create species with 0 traits | Valid (no traits = default species) |
-| 2 | Create species with all negatives | Valid (exceeds budget but allowed) |
-| 3 | Gene modify to add trait | Modifiers update correctly |
-| 4 | Event grants trait | Trait added, opposites removed |
-| 5 | Robot assembly | Only machine traits available |
+| 1 | Create a species with no traits | Accepted |
+| 2 | Create a species mixing positive and negative traits | Accepted while the point total stays non-negative |
+| 3 | Modify a species genetically | Modifiers update from the new trait list |
+| 4 | Grant a trait by script | Applied, with conflicting traits removed |
+| 5 | Rename an icon file and restart | The trait still works and displays a placeholder |
 
-## Error log verification
+## Error-log verification
 
-After any test session, check:
-
-```bash
-# Path to error log
-~/Documents/Paradox Interactive/Stellaris/logs/error.log
-
-# Search for mod-related errors
-grep -i "ui_trait\|ui-species-traits\|ui_trait_" error.log
-
-# Expected: no output (clean load)
-# If errors found: investigate and fix before release
+```
+Stellaris user directory/logs/error.log
 ```
 
-Common error patterns:
+Search for `ui_trait` and `ui-species-traits`. A clean load produces no matching entries.
 
-| Pattern | Meaning | Fix |
-|---------|---------|-----|
-| `unknown trait id: ui_trait_xxx` | Missing localisation key | Add key to `.yml` |
-| `missing icon for trait: ui_trait_xxx` | Missing DDS file | Add `.dds` file |
-| `archetype not found` | Invalid archetype name | Check `allowed_archetypes` |
-| `modifier not found` | Invalid modifier key | Check modifier syntax |
-| `parse error` | Syntax error in `.txt` | Review Clausewitz script syntax |
+| Pattern | Meaning | Resolution |
+|---------|---------|------------|
+| `unknown trait id` | Missing or mismatched identifier | Align the identifier across the trait file, the localisation, and the icon |
+| `missing icon` | Icon file absent or misnamed | Add or rename the DDS file |
+| `modifier not found` | Invalid modifier key | Use a key the targeted engine version supplies |
+| parse error | Syntax error in a `.txt` file | Review the block syntax |
 
-## Release testing checklist
+## Release checklist
 
-Before tagging a release:
-
-- [ ] All 9 test categories pass
-- [ ] `error.log` clean (no mod-related errors)
-- [ ] Both descriptors have correct `supported_version`
-- [ ] README version badge matches release version
-- [ ] Package ZIP contains all files (verify structure)
-- [ ] Steam Workshop upload succeeds
-- [ ] Nexus Mods upload succeeds
-- [ ] Paradox Mods manually uploaded (if applicable)
-- [ ] Changelog updated (if exists)
+- [ ] Every category above passes.
+- [ ] The error log contains no mod-related entries.
+- [ ] Both descriptors declare the same `version` and `supported_version`.
+- [ ] Every trait identifier has a name, a description, and an icon.
+- [ ] The release archive contains the mod directory and the root descriptor.
+- [ ] The published archive installs and loads.
 
 ## Known limitations
 
 | Limitation | Impact | Mitigation |
-|------------|--------|-----------|
-| No automated tests | Manual verification required | Documented testing procedures |
-| No CI pipeline | No automated validation | Manual release checklist |
-| Single language | No non-English testing | English-only localisation |
-| No regression suite | New changes untested against old | Version-tagged releases for comparison |
-| Scaling policy not enforced | Inconsistent tier values possible | Manual review per family |
+|------------|--------|------------|
+| No automated tests | Every change needs manual verification | Follow the categories above |
+| No content validation in continuous integration | Identifier and icon drift is possible | Check the three-way identifier alignment |
+| Single language | No translated verification | English-only scope |
+| No regression suite | An older behaviour can regress unnoticed | Compare against an earlier release tag |
+| Scaling policy not enforced | Tier values can drift | Review a family when changing any of its tiers |
 
 ## Related documentation
 
 | Document | Scope |
 |----------|-------|
-| [Architecture](../architecture.md) | Design constraints, testing requirements |
-| [Components/trait-definitions.md](../components/trait-definitions.md) | Trait field verification |
-| [Components/archetype-config.md](../components/archetype-config.md) | Archetype limit verification |
-| [Operational/build-and-deployment.md](./build-and-deployment.md) | Release testing |
-| Root [README.md](../README.md) | Installation instructions |
+| [Architecture](../architecture.md) | Design constraints, verification requirements |
+| [Components/trait-definitions.md](../components/trait-definitions.md) | Trait fields to verify |
+| [Components/archetype-config.md](../components/archetype-config.md) | Archetype limits to verify |
+| [Build and deployment](./build-and-deployment.md) | Release procedure |

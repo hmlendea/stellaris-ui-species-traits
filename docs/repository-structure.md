@@ -56,7 +56,7 @@ stellaris-ui-species-traits/
 
 | File | Role |
 |------|------|
-| `ui-species-traits.mod` / `ui-species-traits/descriptor.mod` | Mod registration; declares `name`, `path`, `tags`, `supported_version` |
+| `ui-species-traits.mod` / `ui-species-traits/descriptor.mod` | Mod registration; declares `version`, `name`, `path`, `tags`, `supported_version` |
 | `common/species_archetypes/00_species_archetypes.txt` | Defines trait points and max traits per archetype via variables |
 | `common/traits/ui-traits_species.txt` | 38 custom trait definitions with cost, category, opposites, modifiers |
 | `common/traits/ui-traits_species_newtiers.txt` | 20 Very/Extremely tier extensions for vanilla trait families |

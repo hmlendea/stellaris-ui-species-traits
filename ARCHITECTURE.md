@@ -205,7 +205,7 @@ flowchart LR
 
 | Interface | Direction | Contract | Owner | Failure Semantics |
 |-----------|-----------|----------|-------|-------------------|
-| Mod descriptor | Engine → Mod | `descriptor.mod` / `ui-species-traits.mod` with `name`, `path`, `tags`, `supported_version` | Descriptor Area | Mod not listed or version mismatch → mod disabled |
+| Mod descriptor | Engine → Mod | `descriptor.mod` / `ui-species-traits.mod` with `version`, `name`, `path`, `tags`, `supported_version` | Descriptor Area | Mod not listed or version mismatch → mod disabled |
 | Species archetypes | Engine → Mod | `common/species_archetypes/*.txt` defining trait points and max traits per archetype | Archetype Area | Parse error → archetype defaults used |
 | Trait definitions | Engine → Mod | `common/traits/*.txt` with `cost`, `category`, `opposites`, `allowed_archetypes`, `modifier`, `icon` | Trait Definition Area | Parse error → trait omitted; missing icon → placeholder |
 | Localisation | Engine → Mod | `localisation/english/*.yml` with `l_english:` keys matching trait IDs | Localisation Area | Missing key → raw ID displayed |

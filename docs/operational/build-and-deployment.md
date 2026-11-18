@@ -19,7 +19,7 @@ The mod uses **tag-based releases** via GitHub Actions. No build step is require
 The release asset is a ZIP archive containing:
 
 ```
-Universum_Infinitum_Species_Traits_<version>.zip
+ui-species-traits_<version>.zip
 ├── ui-species-traits/           # Mod folder (extracted to Stellaris mod directory)
 │   ├── descriptor.mod
 │   ├── common/
@@ -46,37 +46,45 @@ Universum_Infinitum_Species_Traits_<version>.zip
 # From repository root
 cd /path/to/stellaris-ui-species-traits
 
-# Create package directory
-mkdir -p "release/Universum_Infinitum_Species_Traits_v1.2.3"
+# Set the version being packaged
+VERSION="1.2.3"
 
-# Copy mod folder
-cp -r ui-species-traits "release/Universum_Infinitum_Species_Traits_v1.2.3/"
-
-# Copy root descriptor
-cp ui-species-traits.mod "release/Universum_Infinitum_Species_Traits_v1.2.3/"
-
-# Create ZIP
-cd release
-zip -r "Universum_Infinitum_Species_Traits_v1.2.3.zip" "Universum_Infinitum_Species_Traits_v1.2.3/"
+# Create ZIP with the same layout as the automated workflow
+zip -r "ui-species-traits_${VERSION}.zip" "ui-species-traits/" "ui-species-traits.mod"
 ```
 
 ### Package creation (automated via GitHub Actions)
 
-The release workflows automatically:
-1. Download the GitHub release asset (created manually or via `gh release create`)
-2. Upload to Steam Workshop and Nexus Mods
+The release workflows package the checked-out tag themselves:
+1. Update `version` in `ui-species-traits.mod` and `ui-species-traits/descriptor.mod`
+2. Build `ui-species-traits_<version>.zip` containing `ui-species-traits/` and `ui-species-traits.mod`
+3. Publish to GitHub Releases, Steam Workshop, and Nexus Mods
 
 ## GitHub Actions workflows
 
-### Steam Workshop (`.github/workflows/steam-workshop.yml`)
+### GitHub Release (`.github/workflows/github-release.yml`)
 
-**Trigger:** Push tag `v*.*.*`
+**Trigger:** Published GitHub release
 
 **Steps:**
-1. Checkout repository
-2. Download release asset from GitHub Releases
-3. Unzip to `release/`
-4. Upload to Steam Workshop via `hmlendea/steam-workshop-update@v1.0.0`
+1. Check out the released tag
+2. Extract the version from the release tag
+3. Update the `version` field in both mod descriptors
+4. Build the `ui-species-traits_<version>.zip` archive
+5. Attach the archive to the GitHub release via `softprops/action-gh-release@v2`
+
+**Required secrets:**
+- `GITHUB_TOKEN` (provided automatically)
+
+### Steam Workshop (`.github/workflows/steam-workshop-release.yml`)
+
+**Trigger:** Push tag `v*.*.*` or `workflow_dispatch` with tag input
+
+**Steps:**
+1. Check out the requested tag
+2. Update the `version` field in both mod descriptors
+3. Build and extract the release archive
+4. Upload to Steam Workshop via `hmlendea/steam-workshop-update@latest`
 
 **Required secrets:**
 - `STEAM_USERNAME`
@@ -85,26 +93,27 @@ The release workflows automatically:
 
 **Configuration (in workflow):**
 - `appid`: Steam App ID for Stellaris (281990)
-- `itemid`: Workshop item ID
-- `path`: `release/Universum_Infinitum_Species_Traits/`
+- `itemid`: Workshop item ID (2047811098)
+- `path`: `release/ui-species-traits/`
 - `changenote`: Links to GitHub release
 
-### Nexus Mods (`.github/workflows/nexus-mods.yml`)
+### Nexus Mods (`.github/workflows/nexus-mods-release.yml`)
 
 **Trigger:** Push tag `v*.*.*` or `workflow_dispatch` with tag input
 
 **Steps:**
-1. Checkout repository
-2. Download release asset from GitHub Releases
-3. Upload to Nexus Mods via `Nexus-Mods/upload-action@v1.0.0-beta.10`
+1. Check out the requested tag
+2. Update the `version` field in both mod descriptors
+3. Build the release archive
+4. Upload to Nexus Mods via `Nexus-Mods/upload-action@v1.0.0-beta.11`
 
 **Required secrets:**
 - `NEXUSMODS_API_KEY`
 
 **Configuration (in workflow):**
-- `file_id`: Nexus Mods file ID
+- `file_id`: Nexus Mods file ID (923479)
 - `filename`: `release.zip`
-- `display_name`: `Universum_Infinitum_Species_Traits.zip`
+- `display_name`: `ui-species-traits.zip`
 - `version`: Tag version
 - `description`: Changelog link
 - `category`: `main`
@@ -136,17 +145,17 @@ git status
 # Tag the release
 git tag -a v1.2.3 -m "Release v1.2.3: <summary>"
 
-# Push tag (triggers workflows)
+# Push tag (triggers the Steam Workshop and Nexus Mods workflows)
 git push origin v1.2.3
 
-# Or use GitHub CLI
-gh release create v1.2.3 --title "v1.2.3" --notes "Release notes..." \
-  release/Universum_Infinitum_Species_Traits_v1.2.3.zip
+# Publish the GitHub release (triggers the GitHub Release workflow,
+# which builds and attaches ui-species-traits_1.2.3.zip)
+gh release create v1.2.3 --title "v1.2.3" --notes "Release notes..."
 ```
 
 ### 3. Verify deployment
 
-- **GitHub Actions:** Check workflow runs for steam-workshop and nexus-mods
+- **GitHub Actions:** Check workflow runs for github-release, steam-workshop-release, and nexus-mods-release
 - **Steam Workshop:** Verify mod page shows new version
 - **Nexus Mods:** Verify mod page shows new version
 - **Paradox Mods:** Manual upload required (no workflow)
@@ -166,7 +175,7 @@ No automated workflow. Manual steps:
 
 Users can download ZIP from GitHub Releases page and install manually:
 
-1. Download `Universum_Infinitum_Species_Traits_v1.2.3.zip`
+1. Download `ui-species-traits_<version>.zip`
 2. Extract to `Documents/Paradox Interactive/Stellaris/mod/`
 3. Enable in launcher
 
@@ -197,7 +206,7 @@ If a release has critical issues:
 |-------|-------|------------|
 | Steam upload fails | Invalid credentials | Check `STEAM_USERNAME`, `STEAM_PASSWORD`, `STEAM_2FA_SEED` secrets |
 | Nexus upload fails | Invalid API key | Check `NEXUSMODS_API_KEY` secret |
-| Release asset not found | Asset name mismatch | Ensure ZIP name matches `[[RELEASE_ASSET_LABEL]]_${VERSION#v}.zip` pattern |
+| Release asset not found | Asset name mismatch | Ensure the archive label matches the mod directory name `ui-species-traits` |
 | Mod not loading | `supported_version` mismatch | Update descriptor to match current Stellaris version |
 | Icons missing | DDS files not in package | Verify `gfx/interface/icons/traits/` included in ZIP |
 

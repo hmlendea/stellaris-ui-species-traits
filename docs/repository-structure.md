@@ -8,8 +8,9 @@ This document describes the source tree layout and module organisation of the Un
 stellaris-ui-species-traits/
 ├── .github/
 │   └── workflows/
-│       ├── nexus-mods.yml      # Nexus Mods release workflow
-│       └── steam-workshop.yml  # Steam Workshop release workflow
+│       ├── github-release.yml         # GitHub Release workflow
+│       ├── nexus-mods-release.yml     # Nexus Mods release workflow
+│       └── steam-workshop-release.yml # Steam Workshop release workflow
 ├── src/
 │   └── trait.xcf               # GIMP source file for trait icons
 ├── ui-species-traits/          # Mod package root (extracted to Stellaris mod directory)

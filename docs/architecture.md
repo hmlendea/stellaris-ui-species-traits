@@ -216,7 +216,7 @@ Integration location: All extensions are additive file placements within the exi
 | Localisation | `ui-species-traits/localisation/english/ui-species-traits_l_english.yml`, `ui-species-traits/localisation/english/ui-species-traits_newtiers_l_english.yml` |
 | Assets | `ui-species-traits/gfx/interface/icons/traits/*.dds` |
 | Source Assets | `src/trait.xcf` (GIMP source for icons) |
-| Distribution | `.github/workflows/nexus-mods.yml`, `.github/workflows/steam-workshop.yml` |
+| Distribution | `.github/workflows/github-release.yml`, `.github/workflows/nexus-mods-release.yml`, `.github/workflows/steam-workshop-release.yml` |
 
 ## Related documentation
 

@@ -21,6 +21,7 @@ A Stellaris mod that adds 58 custom species traits, extends several trait famili
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Related Projects](#related-projects)
+- [GitHub Actions](#github-actions)
 - [Project Engagement](#project-engagement)
 - [License](#license)
 
@@ -138,6 +139,14 @@ Other projects in the Universum Infinitum collection include:
 - [Prescripted Countries](https://github.com/hmlendea/stellaris-ui-prescripted-countries): Adds prescripted empires
 - [Species Names](https://github.com/hmlendea/stellaris-ui-species-names): Adds species names
 - [Star Names](https://github.com/hmlendea/stellaris-ui-star-names): Adds star names
+
+## ⚙️ GitHub Actions
+
+| Workflow | Purpose | What it does |
+|----------|---------|--------------|
+| [github-release.yml](https://github.com/hmlendea/stellaris-ui-species-traits/blob/master/.github/workflows/github-release.yml) | GitHub Release deployment | Updates the mod version, packages the release archive, and attaches it to the published GitHub release |
+| [nexus-mods-release.yml](https://github.com/hmlendea/stellaris-ui-species-traits/blob/master/.github/workflows/nexus-mods-release.yml) | Nexus Mods deployment | Updates the mod version, packages the release archive, and publishes it to Nexus Mods |
+| [steam-workshop-release.yml](https://github.com/hmlendea/stellaris-ui-species-traits/blob/master/.github/workflows/steam-workshop-release.yml) | Steam Workshop deployment | Updates the mod version, packages the release archive, and publishes it to Steam Workshop |
 
 ## 💝 Project Engagement
 
